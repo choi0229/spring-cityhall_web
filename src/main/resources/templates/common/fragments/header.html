@@ -1,57 +1,108 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="HeaderFragment">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+   th:fragment="HeaderFragment">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>웹사이트 헤더 및 푸터</title>
-  <style>
-  	/* 헤더 스타일 */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹사이트 헤더 및 푸터</title>
+<link th:href="@{/css/main.css}" rel="stylesheet">
+<style>
+/* 헤더 스타일 */
 .header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 20px 50px;
-	background-color: transparent;
-	color: white;
-	transition: background-color 0.3s ease;
-	position: fixed;
-	width: 100%;
-	top: 0;
-	z-index: 1000;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 20px 50px;
+   background-color: transparent;
+   color: white;
+   transition: background-color 0.3s ease;
+   position: fixed;
+   width: 100%;
+   top: 0;
+   z-index: 1000;
 }
 
 .header:hover {
-	background-color: white;
-	color: #003366;
+   background-color: white;
+   color: #003366;
 }
-  </style>
-  
+</style>
+
 </head>
 <body>
 
-    <!-- 헤더 섹션 시작 -->
-    <header class="header">
-        <!-- 로고 영역 -->
-        <a th:href="@{/}" id="main-title">
-            <div class="logo">서울시청</div>
-        </a>
+   <!-- 헤더 섹션 시작 -->
+   <header class="header">
+      <!-- 로고 영역 -->
+      <div>
+         <a th:href="@{/}"
+            style="display: flex; align-items: center; text-decoration: none;">
+            <img th:src="@{/image/seoulcityhall.png}" alt="서울시청 로고"
+            style="width: 60px; height: 60px;">
+            <div class="logo"
+               style="font-size: 40px; margin-left: 10px; color: black;">서울시청</div>
+         </a>
+      </div>
 
-        <!-- 오른쪽 링크 -->
-        <div class="right-icons">
-            <!-- 로그인하지 않았을 때 -->
-            <div th:if="${session.userId == null}">
-                <a th:href="@{/login.do}">로그인</a>
-                <a th:href="@{/regForm.do}">회원가입</a>
-                <a th:href="@{/rsv.do}">예약</a>
-            </div>
 
-            <!-- 로그인했을 때 -->
-            <div th:if="${session.userId != null}">
-                <a th:href="@{/logout.do}">로그아웃</a>
-                <a th:href="@{/rsv.do}">예약</a>
+
+      <!-- 네비게이션 바 -->
+      <nav class="navbar navbar-expand-lg">
+         <div class="container-fluid">
+            <button class="navbar-toggler" type="button"
+               data-bs-toggle="collapse" data-bs-target="#navbarNav"
+               aria-controls="navbarNav" aria-expanded="false"
+               aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+               <ul class="navbar-nav ms-auto">
+                  <li class="nav-item"><a class="nav-link" href="#news"
+                     style="margin-right: 50px; font-size: 20px;">교통안전사고</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#services"
+                     style="margin-right: 50px; font-size: 20px;">공공시설예약</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#notices"
+                     style="margin-right: 50px; font-size: 20px;">이번주 날씨</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#chatbot"
+                     style="font-size: 20px;">오늘의 날씨</a></li>
+               </ul>
             </div>
-        </div>
-    </header>
+         </div>
+      </nav>
+
+
+      <!-- 오른쪽 링크 -->
+      <div class="right-icons" style="font-size: 25px;">
+         <!-- 로그인하지 않았을 때 -->
+         <div th:if="${session.userId == null}">
+            <a th:href="@{/login.do}">로그인</a> <a th:href="@{/regForm.do}">회원가입</a>
+            <a th:href="@{/rsv.do}">예약</a>
+         </div>
+
+         <!-- 로그인했을 때 -->
+         <div th:if="${session.userId != null}">
+            <a th:href="@{/logout.do}">로그아웃</a> <a th:href="@{/rsv.do}">예약</a>
+         </div>
+      </div>
+   </header>
 
 </body>
+
+<script>
+   //윈도우에서 스크롤 이벤트를 감지하는 리스너를 추가
+   window.addEventListener("scroll", function() {
+
+      // header 요소를 선택하여 header 변수에 할당
+      const header = document.querySelector("header");
+
+      // 스크롤 위치가 100px 이상일 때 조건을 확인
+      if (window.scrollY > 100) {
+         // 스크롤이 100px 이상 내려가면 헤더의 배경색을 흰색으로 변경
+         header.style.backgroundColor = "white";
+      } else {
+         // 스크롤이 100px 이하로 내려오면 헤더의 배경색을 투명으로 변겯
+         header.style.backgroundColor = "transparent";
+      }
+   });
+</script>
 </html>
