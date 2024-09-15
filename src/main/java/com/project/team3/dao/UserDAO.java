@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.team3.service.UserService;
 import com.project.team3.vo.User;
 
 
@@ -17,6 +18,7 @@ public class UserDAO {
 
 	@Autowired
 	SqlSession session;
+	
 	
 	// 로그인
 	public User tryLogin(String userId, String userPw) throws Exception {
@@ -33,58 +35,27 @@ public class UserDAO {
 
 	// 아이디 중복확인
 	public String checkId(String id) {
-		String status = session.selectOne("checkId",id);
-		String result ="9";
-		System.out.println(status);
-		// 사용가능한 아이디
-		if(status==null) {
-			result="1";
-		}else {
-			result="0";
-		}
-		return result;
-		
+		return session.selectOne("checkId",id);
+	}
+	
+	public User getUserById(String id) {
+		return session.selectOne("getUserById",id);
 	}
 
 	public int createUser(User user) {
 		return session.insert("createUser",user);
 		
 	}
+	
+	public int updateUser(User user) {
+		return session.update("updateUser",user);
+		
+	}
+	
+	public int deleteUser(String id) {
+		return session.delete("deleteUser",id);
+		
+	}
 
-//	// nickName을 가지고 User 객체를 리턴받는다.
-//	public static User getUserByNickName(String nickName) throws Exception {
-//		
-//		Connection con = null;
-//		
-//		try {
-//			con = DBUtil.getConnection();
-//			Statement stmt = con.createStatement();
-//			String sql = "select * from user where user_nickname = '" + nickName + "'";
-//			ResultSet rs = stmt.executeQuery(sql);
-//			User user = null;
-//			if (rs.next()) {
-//				String userId = rs.getString("user_id");
-//				String userPw = rs.getString("user_pw");
-//				String userName = rs.getString("user_name");
-//				String userNickname = rs.getString("user_nickname");
-//				String userEmail = rs.getString("user_email");
-//				user = new User(userId, userPw, userName, userNickname, userEmail);
-//			}
-//			return user;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		} finally {
-//			if (con != null) {
-//               try {
-//                   con.close();
-//               } catch (Exception e) {
-//                   // 예외 처리
-//                   e.printStackTrace();
-//               }
-//           }  
-//		}
-//
-//	}
 
 }

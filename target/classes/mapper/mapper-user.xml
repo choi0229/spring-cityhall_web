@@ -10,8 +10,8 @@
 	</select>
 	
 	<insert id="createUser" parameterType="com.project.team3.vo.User">
-		insert into user(user_id, user_pw, user_name, user_nickname, user_email)
-		values(#{userId}, #{userPW}, #{userName}, #{userNickname}, #{userEmail})
+		insert into user(user_id, user_pw, user_name, user_nickname, user_email, user_birth, user_address)
+		values(#{userId}, #{userPw}, #{userName}, #{userNickname}, #{userEmail}, #{userBirth}, #{userAddress})
 	</insert>
 
 	<select id="tryLogin" parameterType="com.project.team3.vo.User" resultType="com.project.team3.vo.User">
@@ -25,12 +25,30 @@
 		from user where user_id = #{userId} and user_pw = #{userPw}
 	</select>
 	
+	<select id="getUserById" parameterType="String" resultType="com.project.team3.vo.User">
+		select user_id userId
+		, user_pw userPw
+		, user_name userName
+		, user_nickname userNickname
+		, user_email userEmail
+		, user_birth userBirth
+		, user_address userAddress
+		from user where user_id = #{userId}
+	</select>
 	
+	<update id="updateUser" parameterType="com.project.team3.vo.User">
+		update user set user_pw = #{userPw}
+			, user_name = #{userName}
+			, user_nickname = #{userNickname}
+			, user_email = #{userEmail}
+			, user_birth = #{userBirth}
+			, user_address = #{userAddress}
+		where user_id = #{userId}
+	</update>
 	
-	<!-- 
-		public String userId;
-	public String userPw;
-	public String userName;
-	public String userNickname;
-	public String userEmail; -->
+	<delete id="deleteUser" parameterType="string">
+		delete from user where user_id = #{userId}
+	</delete>
+	
+
 </mapper>

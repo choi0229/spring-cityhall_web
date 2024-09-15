@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.team3.dao.UserDAO;
+import com.project.team3.service.UserService;
 import com.project.team3.vo.User;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,9 @@ public class UserController {
 
 	@Autowired
 	UserDAO dao;
+	
+	@Autowired
+	UserService service;
 	
 	  @RequestMapping("/login.do")
 	  public String login(HttpServletRequest req) throws Exception {
@@ -46,5 +50,17 @@ public class UserController {
 	  public String logout(HttpSession session) throws Exception {
 		  session.invalidate();
 		  return "main";
+	  }
+	  
+	  @RequestMapping("/mypage.do")
+	  public String getMypageForm(HttpServletRequest req, HttpSession session) throws Exception {
+	      User user = (User) session.getAttribute("userId");  // 세션에서 userId 가져오기
+	      if (user == null) {
+	          return "redirect:/login.do";  // 세션에 userId가 없으면 로그인 페이지로 리다이렉트
+	      }
+	      
+	      User loginUserId = service.getUserById(user.userId);  // userId로 사용자 정보 조회
+	      req.setAttribute("user", loginUserId);
+	      return "login/mypage";
 	  }
 }
