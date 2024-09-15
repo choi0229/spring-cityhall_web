@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.team3.dao.UserDAO;
+import com.project.team3.service.UserService;
 import com.project.team3.vo.User;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,9 @@ public class LoginRestController {
 
 	@Autowired
 	UserDAO dao;
+	
+	@Autowired
+	UserService service;
 	
 	// abId를 전달받아서 해당 방명록을 json data로 리턴함
 	@RequestMapping(value = "loginaction.do", produces = "application/json", method= RequestMethod.POST)
@@ -32,8 +36,20 @@ public class LoginRestController {
 	
 	@RequestMapping("/idCheck.do")
 	  public String checkId(String id) throws Exception {
-		  String status = dao.checkId(id);
+		  //String status = dao.checkId(id);
+		String status = service.isIdAvailable(id);  
+		return status;
+	  }
 	
-		  return status;
+	@RequestMapping("/updateUser.do" )
+	  public int updateUser(String userId, String userPw, String userEmail, String userNickname, String userName, String userAddress, String userBirth) throws Exception {
+			User user = new User(userId, userPw, userName, userNickname, userEmail, userBirth, userAddress);
+			return dao.updateUser(user);
+	  }
+	
+	@RequestMapping("/deleteUser.do" )
+	  public int deleteUser(HttpSession session) throws Exception {
+		User user = (User)session.getAttribute("userId");
+			return dao.deleteUser(user.userId);
 	  }
 }

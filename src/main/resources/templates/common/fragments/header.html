@@ -26,6 +26,10 @@
    background-color: white;
    color: #003366;
 }
+
+#mypage {
+    margin-right: 20px;
+}
 </style>
 
 </head>
@@ -59,7 +63,7 @@
                <ul class="navbar-nav ms-auto">
                   <li class="nav-item"><a class="nav-link" href="#news"
                      style="margin-right: 50px; font-size: 20px;">교통안전사고</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#services"
+                  <li class="nav-item"><a class="nav-link" th:href="@{/rsv.do}"
                      style="margin-right: 50px; font-size: 20px;">공공시설예약</a></li>
                   <li class="nav-item"><a class="nav-link" href="#notices"
                      style="margin-right: 50px; font-size: 20px;">이번주 날씨</a></li>
@@ -81,7 +85,7 @@
 
          <!-- 로그인했을 때 -->
          <div th:if="${session.userId != null}">
-            <a th:href="@{/logout.do}">로그아웃</a> <a th:href="@{/rsv.do}">예약</a>
+            <a id="mypage" th:href="@{/mypage.do}">마이페이지</a> <a th:href="@{/logout.do}">로그아웃</a> 
          </div>
       </div>
    </header>

@@ -13,13 +13,16 @@
 	<h1>회원가입</h1>
 	
 	<form action="regformaction.do">
-		<p>아이디 : <input type="text" id="id" name="id" placeholder="아이디" required><button id="idcheckbtn">중복확인</button></p>
+		<p>아이디 : <input type="text" id="id" name="id" placeholder="아이디" required><button type="button" id="idcheckbtn">중복확인</button></p>
 		<p>비밀번호 : <input type="password" id="pw" name="pw" placeholder="비밀번호" required></p>
 		<p>비밀번호 확인 : <input type="password" id="pw2" name="pw2" placeholder="비밀번호 확인" required></p>
 		<p>이메일 : <input type="text" id="email" name="email" placeholder="이메일" required></p>
 		<p>이름 : <input type="text" id="name" name="name" placeholder="이름" required></p>
 		<p>닉네임 : <input type="text" id="nickname" name="nickname" required></p>
+		<p>생년월일 : <input type="date" id="birth" name="birth" required></p>
+		<p>거주지 : <input type="text" id="address" name="address" required></p>
 		<p><input type="submit" id="regBtn" value="회원가입"></p>
+		
 	</form>
 	
 	<script>
@@ -37,6 +40,7 @@
 						idCheckStatus = 0;
 						alert('이미 존재하는 아이디입니다.');
 						$('#id').focus();
+						return false;
 					}else {
 						alert('사용가능한 아이디입니다.');
 						idCheckStatus = 1;
@@ -51,6 +55,12 @@
 	            $('#pw').focus();
 	            e.preventDefault();
 	        }
+			
+			if(idCheckStatus != 1) {
+				alert('id 중복확인을 해주세요.');
+				$('#id').focus();
+				e.preventDefault();
+			}
 		})
 	</script>
 </body>

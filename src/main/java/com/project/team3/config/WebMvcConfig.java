@@ -18,7 +18,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(loginInterceptor)
-				.addPathPatterns("/rsv.do");
+				.addPathPatterns("/rsv.do")
+				.addPathPatterns("/mypage.do");
 	}
 
 }
