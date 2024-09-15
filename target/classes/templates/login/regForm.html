@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<h1>회원가입</h1>
+	
+	<form action="regformaction.do">
+		<p>아이디 : <input type="text" id="id" name="id" placeholder="아이디" required><button id="idcheckbtn">중복확인</button></p>
+		<p>비밀번호 : <input type="password" id="pw" name="pw" placeholder="비밀번호" required></p>
+		<p>비밀번호 확인 : <input type="password" id="pw2" name="pw2" placeholder="비밀번호 확인" required></p>
+		<p>이메일 : <input type="text" id="email" name="email" placeholder="이메일" required></p>
+		<p>이름 : <input type="text" id="name" name="name" placeholder="이름" required></p>
+		<p>닉네임 : <input type="text" id="nickname" name="nickname" required></p>
+		<p><input type="submit" id="regBtn" value="회원가입"></p>
+	</form>
+	
+	<script>
+		let idCheckStatus = 9;
+		
+		$('#idcheckbtn').on('click',(e)=>{
+			$.ajax({
+				type:"get",
+				url:"idCheck.do",
+				data: {
+					id: $("#id").val()
+				},
+				success: function(result){
+					if(result==0){
+						idCheckStatus = 0;
+						alert('이미 존재하는 아이디입니다.');
+						$('#id').focus();
+					}else {
+						alert('사용가능한 아이디입니다.');
+						idCheckStatus = 1;
+					}
+				}
+			})
+		});
+		
+		$('#regBtn').on('click',(e)=>{
+			if ($('#pw').val() != $('#pw2').val()) {
+	            alert('비밀번호가 다릅니다.');
+	            $('#pw').focus();
+	            e.preventDefault();
+	        }
+		})
+	</script>
+</body>
+</html>

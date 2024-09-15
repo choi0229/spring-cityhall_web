@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:fragment="HeaderFragment">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹사이트 헤더 및 푸터</title>
+  <style>
+  	/* 헤더 스타일 */
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 50px;
+	background-color: transparent;
+	color: white;
+	transition: background-color 0.3s ease;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	z-index: 1000;
+}
+
+.header:hover {
+	background-color: white;
+	color: #003366;
+}
+  </style>
+  
+</head>
+<body>
+
+    <!-- 헤더 섹션 시작 -->
+    <header class="header">
+        <!-- 로고 영역 -->
+        <a th:href="@{/}" id="main-title">
+            <div class="logo">서울시청</div>
+        </a>
+
+        <!-- 오른쪽 링크 -->
+        <div class="right-icons">
+            <!-- 로그인하지 않았을 때 -->
+            <div th:if="${session.userId == null}">
+                <a th:href="@{/login.do}">로그인</a>
+                <a th:href="@{/regForm.do}">회원가입</a>
+                <a th:href="@{/rsv.do}">예약</a>
+            </div>
+
+            <!-- 로그인했을 때 -->
+            <div th:if="${session.userId != null}">
+                <a th:href="@{/logout.do}">로그아웃</a>
+                <a th:href="@{/rsv.do}">예약</a>
+            </div>
+        </div>
+    </header>
+
+</body>
+</html>

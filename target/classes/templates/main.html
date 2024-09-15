@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울시청에 오신 것을 환영합니다</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+
+
+    <!-- 배경 동영상 섹션 -->
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source th:src="@{/image/background.mp4}" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+        <div class="main-section">
+            <div class="card">
+                <!-- 캐러셀 시작 -->
+                <div id="carouselExample" class="carousel slide" data-ride="carousel">
+                    <div class="" style="background-color:#003366; width: 870px; margin-bottom:1em; height: 60px;">
+                        <p style="font-size: 2em;" class="text-white">이달의 뉴스</p>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://news.kbs.co.kr/news/pc/view/view.do?ncd=8058228&ref=A" target="_blank">
+                                <img th:src="@{/image/news1.png}" style="height: 200px; width: 100%; object-fit: cover;">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://news.mt.co.kr/mtview.php?no=2024091207481086639" target="_blank">
+                                <img th:src="@{/image/news2.png}" style="height: 200px; width: 100%; object-fit: cover;">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.ytn.co.kr/_ln/0103_202409121825103304" target="_blank">
+                                <img th:src="@{/image/new3.png}" style="height: 200px; width: 100%; object-fit: cover;">
+                            </a>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">이전</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">다음</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 서비스 아이콘 섹션 -->
+            <div class="card">
+                <div class="icons d-flex justify-content-around p-3">
+                    <div class="text-center">
+                        <img th:src="@{/image/accident.png}" class="mb-2" style="width: 100px">
+                        <p>교통안전사고</p>
+                    </div>
+                    <div class="text-center">
+                        <img th:src="@{/image/reservation.png}" class="mb-2" style="width: 100px">
+                        <p>공공시설 예약</p>
+                    </div>
+                    <div class="text-center">
+                        <img th:src="@{/image/weather.png}" class="mb-2" style="width: 100px">
+                        <p>오늘의 날씨</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 공지사항 및 챗봇 섹션 -->
+        <div class="additional-section">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between">
+                    <h3>공지사항</h3>
+                    <a href="#" class="btn btn-sm btn-secondary">더보기</a>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="#" class="text-dark">[보건행정과] 2024 추석 명절 연휴기간 안내</a>
+                            <span>2024-09-01</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="#" class="text-dark">[청소과] 추석 연휴 기간 쓰레기 수거 일정 안내</a>
+                            <span>2024-09-05</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="#" class="text-dark">[종합민원과] 추석 연휴기간 무인민원발급기 이용 안내</a>
+                            <span>2024-09-10</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 챗봇과 채팅 상담 카드 -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="card-title">챗봇과 채팅 상담</h2>
+                    <p>지금 바로 실시간으로 소통해보세요!</p>
+                    <button class="btn btn-primary mt-3" onclick="window.location.href='chat.do'">채팅 시작하기</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+</html>
