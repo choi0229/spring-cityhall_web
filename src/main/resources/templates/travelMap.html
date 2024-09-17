@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layouts/defaultLayout}"
+    layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seoul Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            width: 70%;
+            transition: all 0.3s ease;
+        }
+
+        .map-and-accordion {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        #map {
+            height: 60vh;
+            width: 100%;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        #kakao-map {
+            height: 35vh;
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+            float: left;
+            border-radius: 15px;
+        }
+
+        .accordion-container {
+            width: 45%;
+            margin-top: 20px;
+        }
+
+        .selected-spot-name {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .bg-red-header {
+            background-color: #ff6f6f; /* 더 강한 빨강 배경 */
+        }
+        
+        .bg-blue-header {
+            background-color: #6fafff; /* 더 세련된 파랑 배경 */
+        }
+
+        .accordion-header button {
+            font-weight: 500;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .leaflet-overlay-pane path {
+            fill: #aee1ff !important;
+            fill-opacity: 0.8;
+        }
+
+        .map-tooltip {
+            background-color: white;
+            border: 1px solid #007bff;
+            color: #007bff;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button.accordion-button {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button.accordion-button:hover {
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            #map, #kakao-map {
+                height: 40vh;
+            }
+
+            .accordion-container {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="map-container">
+        <div id="map"></div>
+
+        <!-- 선택한 관광지 이름이 표시될 부분 -->
+        <div id="selected-spot" class="selected-spot-name"></div>
+
+        <div class="map-and-accordion">
+            <div id="kakao-map"></div>
+            <div class="accordion-container">
+                <div class="accordion" id="accordionExample">
+                    <!-- 아코디언 아이템들이 동적으로 추가될 부분 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 카카오 지도 API -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=333bda7da18df138fb4d9b3e5cf351c4&libraries=services"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script th:inline="javascript">
+    var map = L.map('map').setView([37.5665, 126.9780], 12);
+
+    // 기본 아이콘 설정
+    function createIcon(iconUrl, iconSize) {
+        return L.icon({
+            iconUrl: iconUrl, // DB에서 받은 icon 사용
+            iconSize: iconSize,
+            iconAnchor: [iconSize[0] / 2, iconSize[1]]
+        });
+    }
+
+    var defaultIconSize = [100, 100];
+    var hoverIconSize = [120, 120]; // 마우스 오버 시 확대된 아이콘 크기
+
+    // 관광지 목록 및 각 지역마다 DB에서 가져온 icon 사용
+    var touristSpots = [[${travelList}]];
+
+    // 선택한 관광지 이름을 표시할 HTML 요소
+    var selectedSpotElement = document.getElementById('selected-spot');
+    var accordionContainer = document.getElementById('accordionExample'); // 아코디언이 동적으로 추가될 컨테이너
+
+    touristSpots.forEach(function(spot) {
+        var iconUrl = spot.icon;  // DB에서 가져온 icon 컬럼 사용
+        var defaultIcon = createIcon(iconUrl, defaultIconSize);
+        var hoverIcon = createIcon(iconUrl, hoverIconSize);
+
+        var marker = L.marker([spot.lat, spot.lon], { icon: defaultIcon }).addTo(map);
+
+        // 마우스 오버 이벤트 - 아이콘 크기를 확대
+        marker.on('mouseover', function() {
+            marker.setIcon(hoverIcon);
+            marker.bindTooltip(spot.name, { className: 'map-tooltip', permanent: false }).openTooltip();
+        });
+
+        // 마우스 아웃 이벤트 - 원래 크기로 복구
+        marker.on('mouseout', function() {
+            marker.setIcon(defaultIcon);
+            marker.closeTooltip();
+        });
+
+        // 마커 클릭 이벤트 - 선택한 관광지 이름을 표시 및 AJAX 요청
+        marker.on('click', function() {
+            selectedSpotElement.innerText = spot.name;  // 관광지 이름을 표시
+            
+            accordionContainer.innerHTML = "";
+
+            // AJAX 요청을 통해 코스 정보를 가져와서 경로와 코스 이름을 표시
+            console.log('실행됨, Attraction ID:', spot.id);
+            $.ajax({
+                type: "GET",
+                url: "courselist.do", // 경로는 맞춰주세요
+                data: { id: spot.id }, // 아이콘에서 id 값을 전달
+                success: function(result) {
+                    var colors = ['#FF0000', '#0000FF']; // 빨강, 파랑
+                    var kakaoMap;
+
+                    result.forEach(function(course, index) {
+                        var routePoints = [];
+
+                        // 각 코스의 경유지 좌표를 경로로 설정
+                        routePoints.push(new kakao.maps.LatLng(course.attraction1Lat, course.attraction1Lon));
+                        routePoints.push(new kakao.maps.LatLng(course.attraction2Lat, course.attraction2Lon));
+                        routePoints.push(new kakao.maps.LatLng(course.attraction3Lat, course.attraction3Lon));
+
+                        // 새로운 아코디언 항목을 생성
+                       	var newAccordionItem = `
+						    <div class="accordion-item">
+						        <h2 class="accordion-header" id="heading${index}">
+						            <button class="accordion-button collapsed ${index % 2 === 0 ? 'bg-red-header' : 'bg-blue-header'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
+						                ${course.courseName}
+						            </button>
+						        </h2>
+						        <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#accordionExample">
+						            <div class="accordion-body">
+						                경유지: 
+						                1. ${course.attraction1Name}, ${course.attraction1Lat}, ${course.attraction1Lon}<br>
+						                2. ${course.attraction2Name}, ${course.attraction2Lat}, ${course.attraction2Lon}<br>
+						                3. ${course.attraction3Name}, ${course.attraction3Lat}, ${course.attraction3Lon}
+						            </div>
+						        </div>
+						    </div>
+						`;
+
+                        accordionContainer.innerHTML += newAccordionItem;
+
+                        // 경로 표시
+                        var container = document.getElementById('kakao-map');
+                        container.style.display = 'block';
+
+                        // 카카오 지도를 첫 번째 경로에서만 생성
+                        if (!kakaoMap) {
+                            kakaoMap = new kakao.maps.Map(container, {
+                                center: routePoints[0], // 첫 번째 경로의 시작점을 중심으로 설정
+                                level: 5
+                            });
+                        }
+
+                        // 경유지마다 마커 추가
+                        routePoints.forEach(function(point, pointIndex) {
+                            var marker = new kakao.maps.Marker({
+                                position: point,
+                                map: kakaoMap
+                            });
+                            // 경유지마다 마커 위에 이름 표시 (course에 있는 경유지 이름 사용)
+                            var name = course[`attraction${pointIndex + 1}Name`]; // attraction1Name, attraction2Name 등
+                            var infowindow = new kakao.maps.InfoWindow({
+                                content: `<div style="padding:3px 8px; font-size:14px; font-weight:900; color:#2c3e50; background-color:rgba(255, 255, 255, 0.9); border-radius:5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                             ${name}
+                                          </div>`,
+                                removable: true
+                            });
+
+                            infowindow.open(kakaoMap, marker);
+                        });
+
+                        // 경로 그리기 (각 코스마다 다른 색상 사용)
+                        var polyline = new kakao.maps.Polyline({
+                            path: routePoints,
+                            strokeWeight: 5,
+                            strokeColor: colors[index % colors.length], // 색상을 번갈아 가며 사용
+                            strokeOpacity: 0.7,
+                            strokeStyle: 'solid'
+                        });
+                        polyline.setMap(kakaoMap);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching course data:", error);
+                }
+            });
+        });
+
+    });
+
+    // GeoJSON 파일 불러오기 (지역별 마우스 이벤트 없음)
+    fetch('/travel.do')
+        .then(response => response.json())
+        .then(data => {
+            var geojsonLayer = L.geoJSON(data, {
+                style: function(feature) {
+                    return {
+                        color: "#3388ff",
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.2
+                    };
+                }
+            }).addTo(map);
+
+            // 서울 경계에 맞게 줌을 자동 조정
+            map.fitBounds(geojsonLayer.getBounds());
+        })
+        .catch(error => console.error('Error fetching Seoul boundary data:', error));
+
+    </script>
+</body>
+</html>
