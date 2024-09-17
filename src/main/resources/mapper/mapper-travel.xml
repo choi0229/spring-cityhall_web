@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper-travel">
+
+	
+	<select id="getTravelList" parameterType="int" resultType="com.project.team3.vo.Travel">
+		select * from tourist_attraction where hotspot = #{spot};
+	</select>
+	
+	<select id="getCourseListByAttractionId" parameterType="int" resultType="com.project.team3.vo.Course">
+    select 
+        c.course_id courseId,
+        c.course_name courseName,
+        ta1.lat attraction1Lat,
+        ta1.lon attraction1Lon,
+        ta1.name attraction1Name,
+        ta2.lat attraction2Lat,
+        ta2.lon attraction2Lon,
+        ta2.name attraction2Name,
+        ta3.lat attraction3Lat,
+        ta3.lon attraction3Lon,
+        ta3.name attraction3Name
+    from course c
+    join tourist_attraction ta1 on c.attraction_id1 = ta1.id
+    join tourist_attraction ta2 on c.attraction_id2 = ta2.id
+    join tourist_attraction ta3 on c.attraction_id3 = ta3.id
+    where c.attraction_id1 = #{id} or c.attraction_id2 = #{id} or c.attraction_id3 = #{id}
+</select>
+
+	
+
+</mapper>
