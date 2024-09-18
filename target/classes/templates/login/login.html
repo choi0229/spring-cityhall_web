@@ -1,66 +1,99 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layouts/defaultLayout}"
       layout:fragment="Content">
+
+<!-- Bootstrap CSS 링크 추가 -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>로그인 페이지</title>
+    <!-- jQuery 링크 추가 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
-<style>
-.container {
-	margin-top: 100px
-}
-</style>
+
 <body>
+    <!-- 로그인 폼 컨테이너 -->
+    <div class="container mt-8">
+        <div class="row justify-content-center">
+            <div class="col-md-4" style="margin-top: 150px;">
+                <h3 class="text-center mb-3" style="font-size: 40px;">로그인</h3>
+                
+                <!-- 로그인 폼 -->
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <!-- 아이디 입력 -->
+                            <div class="form-group">
+                                <p>아이디</p>
+                                <input type="text" id="id" name="id" placeholder="아이디" class="form-control" required>
+                            </div>
 
-<div class="container">
-	<p>아이디 : <input type="text" id="id" placeholder="아이디" required></p>
-		<p>비밀번호 : <input type="password" id="pw" placeholder="비밀번호" required></p>
-		<button id="loginBtn">로그인</button>
-</div>
-	
-		
-	
-	
-	<script>
-	 $(function() {
-         //form submit 이벤트 핸들러 등록
-         $('#loginBtn').on('click', function(e) {
-            if ($('#id').val() == '') {
-               alert('아이디를 입력하지 않으셨습니다.');
-               e.preventDefault();
-               return;
-            }
-            if ($('#pw').val() == '') {
-               alert('비밀번호 입력하지 않으셨습니다.');
-               e.preventDefault();
-               return;
+                            <!-- 비밀번호 입력 -->
+                            <div class="form-group">
+                                <p>비밀번호</p>
+                                <input type="password" id="pw" name="pw" placeholder="비밀번호" class="form-control" required>
+                            </div>
 
-            }
-            
-            $.ajax({
-               url: 'loginaction.do',
-               type: 'POST',
-               data: {
-                  id:$('#id').val(),
-                  pw:$('#pw').val() 
-               },
-               success: function(response) {
-            	   console.log(response);
-            	      if(response == null || response.length==0) {
-            	    	  alert('아이디 혹은 비밀번호가 다릅니다.');
-            	    	  $('#id').focus();
-            	      }else {
-            	    	  window.location.href='main.do';
-            	      }
-            	   }
+                            <!-- 로그인 버튼 -->
+                            <button type="button" id="loginBtn" class="btn btn-primary btn-block">로그인</button>
+
+                            <!-- 아이디/비밀번호 찾기 및 회원가입 링크 -->
+                            <div class="text-center mt-3">
+                                <a th:href="findId.do" class="text-secondary">아이디 찾기 |</a> 
+                                <a th:href="findPw.do" class="text-secondary">비밀번호 찾기</a> 
+                                <span class="mx-2">|</span> 
+                                <a th:href="regForm.do" class="text-secondary">회원가입</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery 및 Bootstrap JS 추가 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- 로그인 스크립트 -->
+    <script>
+        $(function() {
+            // 로그인 버튼 클릭 이벤트 처리
+            $('#loginBtn').on('click', function(e) {
+                // 아이디 입력 확인
+                if ($('#id').val() == '') {
+                    alert('아이디를 입력하지 않으셨습니다.');
+                    e.preventDefault();
+                    return;
+                }
+                // 비밀번호 입력 확인
+                if ($('#pw').val() == '') {
+                    alert('비밀번호를 입력하지 않으셨습니다.');
+                    e.preventDefault();
+                    return;
+                }
+
+                // Ajax 요청 보내기
+                $.ajax({
+                    url: 'loginaction.do',
+                    type: 'POST',
+                    data: {
+                        id: $('#id').val(),
+                        pw: $('#pw').val()
+                    },
+                    success: function(response) {
+                        if (response == null || response.length == 0) {
+                            alert('아이디 혹은 비밀번호가 다릅니다.');
+                            $('#id').focus();
+                        } else {
+                            window.location.href = 'main.do';
+                        }
+                    }
+                });
             });
-            
-         });
-      });
-	</script>
+        });
+    </script>
 </body>
 </html>

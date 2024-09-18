@@ -52,4 +52,37 @@ public class LoginRestController {
 		User user = (User)session.getAttribute("userId");
 			return dao.deleteUser(user.userId);
 	  }
+	
+	@RequestMapping("/findactionId.do")
+	   public String findId(@RequestParam("name") String name, 
+	                        @RequestParam("email") String email, 
+	                        @RequestParam("birth") String birth) { 
+	        
+	       // DAO를 통해 아이디 찾기
+	       String userId = dao.findId(name, email, birth);
+	       
+	       // 아이디가 있으면 반환하고, 없으면 메시지 반환
+	       if (userId != null) {
+	           return userId;  // 찾은 아이디를 반환
+	       } else {
+	           return "해당 정보로 등록된 아이디가 없습니다.";  // 아이디를 찾지 못한 경우 메시지 반환
+	       }
+	   }
+
+	    
+	    @RequestMapping("/findactionPassword.do")
+	    public String findPassword(@RequestParam("id") String id, 
+	                               @RequestParam("email") String email) { 
+	         
+	        // DAO를 통해 비밀번호 찾기
+	        String userPassword = dao.findPassword(id, email);
+	        
+	        // 비밀번호가 있으면 반환하고, 없으면 메시지 반환
+	        if (userPassword != null) {
+	            return userPassword;  // 비밀번호 반환
+	        } else {
+	            return "해당 정보로 등록된 비밀번호가 없습니다.";  // 비밀번호가 없을 경우 메시지 반환
+	        }
+	    }
+
 }

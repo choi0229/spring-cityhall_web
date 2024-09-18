@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,24 @@ public class UserDAO {
 		return session.delete("deleteUser",id);
 		
 	}
+	
+	public String findId(String name, String email, String birth) {
+	       Map<String, Object> params = new HashMap<>();
+	       params.put("name", name);
+	       params.put("email", email);
+	       params.put("birth", birth);  
+
+	       return session.selectOne("findId", params); 
+	}
+
+	public String findPassword(String id, String email) {
+	       Map<String, Object> params = new HashMap<>();
+	       params.put("id", id);
+	       params.put("email", email);
+
+	       return session.selectOne("findPassword", params); 
+	}
+
 
 
 }

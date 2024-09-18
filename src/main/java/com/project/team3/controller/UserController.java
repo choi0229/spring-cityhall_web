@@ -63,4 +63,14 @@ public class UserController {
 	      req.setAttribute("user", loginUserId);
 	      return "login/mypage";
 	  }
+	  
+	  @RequestMapping("/findId.do")
+	  public String getFindIdForm() throws Exception {
+		  return "login/findid";
+	  }
+	  
+	  @RequestMapping("/findPw.do")
+	  public String getFindPwForm() throws Exception {
+		  return "login/findpw";
+	  }
 }

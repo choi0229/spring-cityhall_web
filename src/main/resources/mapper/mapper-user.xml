@@ -50,5 +50,20 @@
 		delete from user where user_id = #{userId}
 	</delete>
 	
+	<select id="findId" resultType="String">
+      SELECT user_id
+      FROM user
+      WHERE
+      user_name = #{name}
+      AND user_email = #{email}
+      AND user_birth = #{birth}
+   </select>
+
+   <select id="findPassword" resultType="String">
+      SELECT user_id
+      FROM user
+      WHERE user_id = #{id}
+      AND user_email = #{email}
+   </select>
 
 </mapper>
