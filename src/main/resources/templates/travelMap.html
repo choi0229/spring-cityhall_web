@@ -426,7 +426,8 @@
 	                  	    data-comment-details="${i.details}"
 	                  	    data-comment-id="${i.commentId}">수정</button>
 	                  	    <button class="btn btn-outline-danger btn-sm" id="deleteBtn"
-	                  	    data-comment-id="${i.commentId}">삭제</button>
+	                  	    data-comment-id="${i.commentId}"
+	                  	    data-comment-user-id="${i.userId}">삭제</button>
 	                  	  </span>
 	                  	</p>`;
                 });
@@ -479,6 +480,7 @@
         } else {
             // ID가 일치하지 않으면 경고창 표시
             alert('수정할 권한이 없습니다.');
+            return false;
         }
     })
     
@@ -502,8 +504,20 @@
     
     
     $(document).on('click','#deleteBtn',function(){
+    	let loggedInUserId = [[${user}]];
+    	let commentUserId = $(this).data('comment-user-id');
     	selectedCommentId = $(this).data('comment-id');
-    	console.log(selectedCommentId)
+    	// 로그인된 사용자와 예약한 사용자의 ID가 같은지 확인
+        if (loggedInUserId == commentUserId) {
+            // ID가 일치하면 모달 열기
+            $('#commentDetail').val($(this).data('comment-details')); 
+            
+            $('#commentUpdateModal').modal('show');  // 모달 열기
+        } else {
+            // ID가 일치하지 않으면 경고창 표시
+            alert('삭제할 권한이 없습니다.');
+            return false;
+        }
     	$.ajax({
     		type:"GET",
     		url:"deleteComment.do",
