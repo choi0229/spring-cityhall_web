@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.team3.dao.TravelDAO;
+import com.project.team3.vo.Comment;
 import com.project.team3.vo.Course;
+import com.project.team3.vo.User;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class TravelRestController {
@@ -43,6 +47,30 @@ public class TravelRestController {
     public List<Course> getCourseListByAttractionId(@RequestParam("id") int id) {
         return dao.getCourseListByAttractionId(id); // DAO에서 데이터를 받아와 반환
     }
+    
+    @GetMapping(value = "/comment.do")
+    public List<Comment> getCommentListById(@RequestParam("courseId") int id) {
+    	System.out.println("실행");
+        return dao.getCommentListById(id); // DAO에서 데이터를 받아와 반환
+    }
 
+    @GetMapping(value = "/commentAdd.do")
+    public int createComment(@RequestParam("courseId") int courseId, double rating, String details, HttpSession session) {
+    	System.out.println(courseId);
+    	User user = (User)session.getAttribute("userId");
+    	Comment comment = new Comment(details, user.userId, courseId, rating);
+        return dao.createComment(comment); // DAO에서 데이터를 받아와 반환
+    }
+    
+    @GetMapping(value = "/updateComment.do")
+    public int updateComment(@RequestParam("commentId") int commentId, String details) {
+    	Comment comment = new Comment(details, commentId);
+        return dao.updateComment(comment); // DAO에서 데이터를 받아와 반환
+    }
+    
+    @GetMapping(value = "/deleteComment.do")
+    public int deleteComment(@RequestParam("commentId") int commentId) {
+        return dao.deleteComment(commentId); // DAO에서 데이터를 받아와 반환
+    } 
     
 }
