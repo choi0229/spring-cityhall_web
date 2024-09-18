@@ -1,11 +1,11 @@
 package com.project.team3.vo;
 
 public class Course {
-	public Course(int couseId, String courseName, double attraction1Lon, double attraction1Lat, String attraction1Name,
+	public Course(int courseId, String courseName, double attraction1Lon, double attraction1Lat, String attraction1Name,
 			double attraction2Lon, double attraction2Lat, String attraction2Name, double attraction3Lon,
 			double attraction3Lat, String attraction3Name) {
 		super();
-		this.couseId = couseId;
+		this.courseId = courseId;
 		this.courseName = courseName;
 		this.attraction1Lon = attraction1Lon;
 		this.attraction1Lat = attraction1Lat;
@@ -17,7 +17,7 @@ public class Course {
 		this.attraction3Lat = attraction3Lat;
 		this.attraction3Name = attraction3Name;
 	}
-	public int couseId;
+	public int courseId;
 	public String courseName;
 	public double attraction1Lon;
 	public double attraction1Lat;
@@ -28,9 +28,40 @@ public class Course {
 	public double attraction3Lon;
 	public double attraction3Lat;
 	public String attraction3Name;
+	public double averageRating;
 	
 	
 	
+	public Course(int courseId, String courseName, double attraction1Lon, double attraction1Lat, String attraction1Name,
+			double attraction2Lon, double attraction2Lat, String attraction2Name, double attraction3Lon,
+			double attraction3Lat, String attraction3Name, double averageRating) {
+		super();
+		this.courseId = courseId;
+		this.courseName = courseName;
+		this.attraction1Lon = attraction1Lon;
+		this.attraction1Lat = attraction1Lat;
+		this.attraction1Name = attraction1Name;
+		this.attraction2Lon = attraction2Lon;
+		this.attraction2Lat = attraction2Lat;
+		this.attraction2Name = attraction2Name;
+		this.attraction3Lon = attraction3Lon;
+		this.attraction3Lat = attraction3Lat;
+		this.attraction3Name = attraction3Name;
+		this.averageRating = averageRating;
+	}
+
+	public double getAverageRating() {
+		return averageRating;
+	}
+
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
+	}
+
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
+	}
+
 	public String getAttraction1Name() {
 		return attraction1Name;
 	}
@@ -55,9 +86,9 @@ public class Course {
 		this.attraction3Name = attraction3Name;
 	}
 
-	public Course(int couseId, String courseName, double attraction1Lon, double attraction1Lat, double attraction2Lon,
+	public Course(int courseId, String courseName, double attraction1Lon, double attraction1Lat, double attraction2Lon,
 			double attraction2Lat, double attraction3Lon, double attraction3Lat) {
-		this.couseId = couseId;
+		this.courseId = courseId;
 		this.courseName = courseName;
 		this.attraction1Lon = attraction1Lon;
 		this.attraction1Lat = attraction1Lat;
@@ -69,18 +100,18 @@ public class Course {
 	
 	@Override
 	public String toString() {
-		return "Course [couseId=" + couseId + ", courseName=" + courseName + ", attraction1Lon=" + attraction1Lon
+		return "Course [couseId=" + courseId + ", courseName=" + courseName + ", attraction1Lon=" + attraction1Lon
 				+ ", attraction1Lat=" + attraction1Lat + ", attraction1Name=" + attraction1Name + ", attraction2Lon="
 				+ attraction2Lon + ", attraction2Lat=" + attraction2Lat + ", attraction2Name=" + attraction2Name
 				+ ", attraction3Lon=" + attraction3Lon + ", attraction3Lat=" + attraction3Lat + ", attraction3Name="
 				+ attraction3Name + "]";
 	}
 	
-	public int getCouseId() {
-		return couseId;
+	public int getCourseId() {
+		return courseId;
 	}
 	public void setCouseId(int couseId) {
-		this.couseId = couseId;
+		this.courseId = couseId;
 	}
 	public String getCourseName() {
 		return courseName;

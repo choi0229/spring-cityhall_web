@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.team3.vo.Comment;
 import com.project.team3.vo.Course;
 import com.project.team3.vo.Travel;
 
@@ -24,5 +25,20 @@ public class TravelDAO {
 	public List<Course> getCourseListByAttractionId(int id) {
 		return session.selectList("getCourseListByAttractionId", id);
 	}
+	
+	public List<Comment> getCommentListById(int id) {
+		return session.selectList("getCommentListById",id);
+	}
+	
+	public int createComment(Comment comment) {
+		return session.insert("createComment",comment);
+	}
 
+	public int updateComment(Comment comment) {
+		return session.update("updateComment",comment);
+	}
+	
+	public int deleteComment(int commentId) {
+		return session.delete("deleteComment",commentId);
+	}
 }

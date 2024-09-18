@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seoul Map</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         body {
@@ -46,7 +48,7 @@
         }
 
         #kakao-map {
-            height: 35vh;
+            height: 40vh;
             width: 100%;
             margin-top: 20px;
             display: none;
@@ -127,6 +129,31 @@
                 margin-top: 10px;
             }
         }
+        
+        .rating {
+		  display: flex;
+		  direction: rtl; /* 별을 오른쪽에서 왼쪽으로 정렬 */
+		}
+		
+		.rating input {
+		  display: none; /* 라디오 버튼 숨김 */
+		}
+		
+		.rating label {
+		  font-size: 2rem;
+		  color: #ddd; /* 채워지지 않은 별 색상 */
+		  cursor: pointer;
+		}
+		
+		.rating input:checked ~ label {
+		  color: #FFD700; /* 클릭한 별부터 채워진 별까지 노란색 */
+		}
+		
+		.rating label:hover,
+		.rating label:hover ~ label {
+		  color: #FFD700; /* 마우스를 올렸을 때 미리보기 */
+		}
+        
     </style>
 </head>
 <body>
@@ -146,12 +173,37 @@
             </div>
         </div>
     </div>
+    
+    <!-- 수정하기 모달 : 시작 -->
+		<div class="modal" id="commentUpdateModal" tabindex="-1">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title">수정하기</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="form-group">
+		                    <label for="commentDetail">댓글</label>
+		                    <input type="text" id="commentDetail" class="form-control" required>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		                <button type="button" class="btn btn-primary" id="commentUpdateBtn">수정하기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!-- 수정하기 모달 : 끝 -->
 
     <!-- 카카오 지도 API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=333bda7da18df138fb4d9b3e5cf351c4&libraries=services"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <script th:inline="javascript">
+    let selectedCommentId ='';
+    
     var map = L.map('map').setView([37.5665, 126.9780], 12);
 
     // 기본 아이콘 설정
@@ -195,14 +247,13 @@
         // 마커 클릭 이벤트 - 선택한 관광지 이름을 표시 및 AJAX 요청
         marker.on('click', function() {
             selectedSpotElement.innerText = spot.name;  // 관광지 이름을 표시
-            
             accordionContainer.innerHTML = "";
 
             // AJAX 요청을 통해 코스 정보를 가져와서 경로와 코스 이름을 표시
             console.log('실행됨, Attraction ID:', spot.id);
             $.ajax({
                 type: "GET",
-                url: "courselist.do", // 경로는 맞춰주세요
+                url: "courselist.do", // 경로를 맞춰주세요
                 data: { id: spot.id }, // 아이콘에서 id 값을 전달
                 success: function(result) {
                     var colors = ['#FF0000', '#0000FF']; // 빨강, 파랑
@@ -216,24 +267,58 @@
                         routePoints.push(new kakao.maps.LatLng(course.attraction2Lat, course.attraction2Lon));
                         routePoints.push(new kakao.maps.LatLng(course.attraction3Lat, course.attraction3Lon));
 
+                        // 별점의 averageRating 값을 가져옴
+                        const averageRating = course.averageRating;
+
                         // 새로운 아코디언 항목을 생성
-                       	var newAccordionItem = `
-						    <div class="accordion-item">
-						        <h2 class="accordion-header" id="heading${index}">
-						            <button class="accordion-button collapsed ${index % 2 === 0 ? 'bg-red-header' : 'bg-blue-header'}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
-						                ${course.courseName}
-						            </button>
-						        </h2>
-						        <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#accordionExample">
-						            <div class="accordion-body">
-						                경유지: 
-						                1. ${course.attraction1Name}, ${course.attraction1Lat}, ${course.attraction1Lon}<br>
-						                2. ${course.attraction2Name}, ${course.attraction2Lat}, ${course.attraction2Lon}<br>
-						                3. ${course.attraction3Name}, ${course.attraction3Lat}, ${course.attraction3Lon}
-						            </div>
-						        </div>
-						    </div>
-						`;
+                        var newAccordionItem = `
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading${index}">
+                                    <button id="commentBtn" class="accordion-button collapsed ${index % 2 === 0 ? 'bg-red-header' : 'bg-blue-header'} d-flex justify-content-between align-items-center" 
+                                        data-course-id="${course.courseId}" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#collapse${index}" 
+                                        aria-expanded="false" 
+                                        aria-controls="collapse${index}">
+                                        <!-- 코스 이름 왼쪽에 배치 -->
+                                        <span>${course.courseName}</span>
+
+                                        <!-- 별 오른쪽 끝에 배치 -->
+                                        <div class="rating d-flex" id="rating-${course.courseId}">
+                                            <input type="radio" id="starTotal5-${course.courseId}" name="ratingTotal-${course.courseId}" value="5" ${averageRating >= 4.5 ? 'checked' : ''} disabled />
+                                            <label for="starTotal5-${course.courseId}" title="5 stars">★</label>
+
+                                            <input type="radio" id="starTotal4-${course.courseId}" name="ratingTotal-${course.courseId}" value="4" ${averageRating >= 3.5 && averageRating < 4.5 ? 'checked' : ''} disabled />
+                                            <label for="starTotal4-${course.courseId}" title="4 stars">★</label>
+
+                                            <input type="radio" id="starTotal3-${course.courseId}" name="ratingTotal-${course.courseId}" value="3" ${averageRating >= 2.5 && averageRating < 3.5 ? 'checked' : ''} disabled />
+                                            <label for="starTotal3-${course.courseId}" title="3 stars">★</label>
+
+                                            <input type="radio" id="starTotal2-${course.courseId}" name="ratingTotal-${course.courseId}" value="2" ${averageRating >= 1.5 && averageRating < 2.5 ? 'checked' : ''} disabled />
+                                            <label for="starTotal2-${course.courseId}" title="2 stars">★</label>
+
+                                            <input type="radio" id="starTotal1-${course.courseId}" name="ratingTotal-${course.courseId}" value="1" ${averageRating < 1.5 ? 'checked' : ''} disabled />
+                                            <label for="starTotal1-${course.courseId}" title="1 star">★</label>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <h5>코스: ${course.attraction1Name} -> ${course.attraction2Name} -> ${course.attraction3Name}</h4>
+
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="commentContent" placeholder="댓글입력" aria-label="Recipient's username" aria-describedby="commentAddBtn" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="commentAddBtn">저장</button>
+                                    </div>
+
+                                    <div id="commentList">
+                                        // 댓글 내용이 들어감
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        `;
 
                         accordionContainer.innerHTML += newAccordionItem;
 
@@ -255,12 +340,9 @@
                                 position: point,
                                 map: kakaoMap
                             });
-                            // 경유지마다 마커 위에 이름 표시 (course에 있는 경유지 이름 사용)
                             var name = course[`attraction${pointIndex + 1}Name`]; // attraction1Name, attraction2Name 등
                             var infowindow = new kakao.maps.InfoWindow({
-                                content: `<div style="padding:3px 8px; font-size:14px; font-weight:900; color:#2c3e50; background-color:rgba(255, 255, 255, 0.9); border-radius:5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                             ${name}
-                                          </div>`,
+                                content: `<div style="padding:3px 8px; font-size:14px; font-weight:900; color:#2c3e50; background-color:rgba(255, 255, 255, 0.9); border-radius:5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">${name}</div>`,
                                 removable: true
                             });
 
@@ -306,6 +388,134 @@
         })
         .catch(error => console.error('Error fetching Seoul boundary data:', error));
 
-    </script>
+    $(document).on('click', '.accordion-button', function() {
+        // 클릭된 버튼에서 data-course-id 속성 값 가져오기
+        var courseId = $(this).data('course-id');
+        
+        console.log("Clicked courseId:", courseId);  // courseId 값 콘솔에 출력
+        
+        // AJAX 요청
+        $.ajax({
+            type: "GET",
+            url: "comment.do",
+            data: { courseId: courseId },  // 가져온 courseId를 AJAX 요청에 포함
+            success: function(result) {
+                console.log(result);
+                let commentList = $(`button[data-course-id='${courseId}']`).closest('.accordion-item').find('#commentList');
+                let updatedContent = '';
+                result.forEach(function(i) {
+                    let date = new Date(i.time); // ISO 8601 형식의 시간을 JavaScript Date 객체로 변환
+                    let formattedTime = date.toLocaleString('ko-KR', { 
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        second: '2-digit'
+                    }); // '년-월-일 시:분:초' 형식으로 변환
+
+                    updatedContent += `
+                    	<p>
+	                  	  아이디 : <span class="fw-bold me-5">${i.userId}</span> ${formattedTime}
+	                  	</p>
+	                  	<p class="d-flex justify-content-between">
+	                  	  ${i.details}
+	                  	  <span>
+	                  	    <button class="btn btn-outline-warning btn-sm" id="showUpdateModal"
+	                  	    data-comment-user-id="${i.userId}"
+	                  	    data-comment-details="${i.details}"
+	                  	    data-comment-id="${i.commentId}">수정</button>
+	                  	    <button class="btn btn-outline-danger btn-sm" id="deleteBtn"
+	                  	    data-comment-id="${i.commentId}">삭제</button>
+	                  	  </span>
+	                  	</p>`;
+                });
+                commentList.html(updatedContent);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", error);
+            }
+        });
+    });
+    
+    $(document).on('click', '#commentAddBtn', function() {
+        // 해당 버튼이 속한 아코디언 아이템을 찾습니다.
+        var accordionItem = $(this).closest('.accordion-item');
+        
+        // 아코디언 아이템 내의 accordion-button에서 courseId를 가져옵니다.
+        var courseId = accordionItem.find('.accordion-button').data('course-id');
+        
+        // AJAX 요청을 통해 댓글을 추가합니다.
+        $.ajax({
+            type: 'GET',
+            url: 'commentAdd.do',
+            data: {
+                rating: Number(accordionItem.find(`input[name="rating-${courseId}"]:checked`).val()), // 선택한 평점
+                courseId: courseId,  // 가져온 courseId
+                details: accordionItem.find('#commentContent').val()  // 입력된 댓글 내용
+            },
+            success: function(result) {
+                alert('댓글이 추가되었습니다');
+                window.location.href='/travelMap.do'
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", error);
+            }
+        });
+    });
+    
+    // 댓글 수정하기 모달열기
+    $(document).on('click','#showUpdateModal', function(){
+    	let loggedInUserId = [[${user}]];
+		let commentUserId = $(this).data('comment-user-id');  // HTML에 data 속성으로 등록된 ID
+        
+        selectedCommentId = $(this).data('comment-id');
+        // 로그인된 사용자와 예약한 사용자의 ID가 같은지 확인
+        if (loggedInUserId == commentUserId) {
+            // ID가 일치하면 모달 열기
+            $('#commentDetail').val($(this).data('comment-details')); 
+            
+            $('#commentUpdateModal').modal('show');  // 모달 열기
+        } else {
+            // ID가 일치하지 않으면 경고창 표시
+            alert('수정할 권한이 없습니다.');
+        }
+    })
+    
+    
+    $(document).on('click','#commentUpdateBtn',()=>{
+    	let commentDetail = $('#commentDetail').val();
+    	
+    	$.ajax({
+    		type:"GET",
+    		url:"updateComment.do",
+    		data:{
+    			details: commentDetail,
+    			commentId: selectedCommentId
+    		},
+    		success: function(result){
+    			alert('수정되었습니다.');
+    			window.location.href='/travelMap.do'
+    		}
+    	})
+    })
+    
+    
+    $(document).on('click','#deleteBtn',function(){
+    	selectedCommentId = $(this).data('comment-id');
+    	console.log(selectedCommentId)
+    	$.ajax({
+    		type:"GET",
+    		url:"deleteComment.do",
+    		data:{
+    			commentId: selectedCommentId
+    		},
+    		success: function(result){
+    			alert('삭제되었습니다.');
+    			window.location.href='/travelMap.do'
+    		}
+    	})
+    })
+</script>
 </body>
 </html>
