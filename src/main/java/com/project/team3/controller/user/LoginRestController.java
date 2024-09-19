@@ -42,7 +42,13 @@ public class LoginRestController {
 	  }
 	
 	@RequestMapping("/updateUser.do" )
-	  public int updateUser(String userId, String userPw, String userEmail, String userNickname, String userName, String userAddress, String userBirth) throws Exception {
+	  public int updateUser(@RequestParam("userId") String userId
+			  ,@RequestParam("userPw") String userPw
+			  ,@RequestParam("userEmail") String userEmail
+			  ,@RequestParam("userNickname") String userNickname
+			  ,@RequestParam("userName") String userName
+			  ,@RequestParam("userAddress") String userAddress
+			  ,@RequestParam("userBirth") String userBirth) throws Exception {
 			User user = new User(userId, userPw, userName, userNickname, userEmail, userBirth, userAddress);
 			return dao.updateUser(user);
 	  }

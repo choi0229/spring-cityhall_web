@@ -22,7 +22,7 @@
       style="position: relative; width: 100vw; height: 100vh; overflow: hidden;">
       <video autoplay muted loop
          style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 100vh; object-fit: cover; transform: translate(-50%, -50%); z-index: -1;">
-         <source th:src="@{/image/backgroundmedia.mp4}" type="video/mp4">
+         <source th:src="@{/image/backSeoul.mp4}" type="video/mp4">
       </video>
    </div>
 
@@ -105,7 +105,7 @@
                   style="border-radius: 15px; background-color: #f0f8ff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;"
                   onmouseover="this.style.backgroundColor='#007bff'; this.style.color='#ffffff'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.2)';"
                   onmouseout="this.style.backgroundColor='#f0f8ff'; this.style.color='#000000'; this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.1)';">
-                  <a th:href="@{/travelMap.do}" class="card-link"
+                  <a th:href="@{/reservation.do}" class="card-link"
                      style="text-decoration: none; color: inherit;"> <img
                      th:src="@{/image/reservation.png}" class="mb-3"
                      style="width: 100px; margin-bottom: 15px;">
@@ -121,12 +121,12 @@
                   style="border-radius: 15px; background-color: #f0f8ff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;"
                   onmouseover="this.style.backgroundColor='#007bff'; this.style.color='#ffffff'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.2)';"
                   onmouseout="this.style.backgroundColor='#f0f8ff'; this.style.color='#000000'; this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.1)';">
-                  <a th:href="@{/accidentPage}" class="card-link"
+                  <a th:href="@{/travelMap.do}" class="card-link"
                      style="text-decoration: none; color: inherit;"> <img
-                     th:src="@{/image/weather.png}" class="mb-3"
+                     th:src="@{/image/tourism.png}" class="mb-3"
                      style="width: 100px; margin-bottom: 15px;">
                      <h5 class="card-title"
-                        style="font-size: 30px; font-weight: bold;">이번주 날씨</h5>
+                        style="font-size: 30px; font-weight: bold;">서울관광탐색</h5>
                   </a>
                </div>
             </div>
@@ -148,26 +148,26 @@
          </div>
       </div>
 
-      <!-- 공지사항 카드 -->
       <div class="row">
-         <div class="col-lg-4 col-md-6 mb-4">
+         <div class="col-lg-4 col-md-4 mb-4">
             <div class="card p-3 h-100"
-               style="border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+               style="border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); max-width: 100%;">
                <div class="notice-header"
-                  style="text-align: left; padding-bottom: 50px; border-bottom: 2px solid #007bff;">
-                  <h4
-                     style="color: #007bff; font-weight: bold; font-size: 24px; display: inline-block; margin-right: 500px;">
+                  style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid #007bff; width: 90%;">
+                  <!-- 공지사항 제목을 왼쪽에 배치 -->
+                  <h4 style="color: #007bff; font-weight: bold; font-size: 24px;">
                      공지사항</h4>
+                  <!-- 더하기 버튼을 오른쪽에 배치 -->
                   <a th:href="@{/noticePage}"
-                     style="color: #007bff; font-size: 20px; text-decoration: none; display: inline-block; vertical-align: middle;">+</a>
+                     style="color: #007bff; font-size: 20px; text-decoration: none;">+</a>
                </div>
                <ul style="list-style-type: none; padding: 10px;">
                   <li
-                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left; width: 600px;">
+                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
                      <a th:href="@{/notice/1}"
                      style="text-decoration: none; color: #333;"> <span
                         style="font-weight: bold;">[보건행정과]</span> 2024 추석 명절 연휴기간 안내 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-01</span>
+                        style="float: right; color: #666; font-size: 14px; margin-left: 100px;">2024-09-01</span>
                   </a>
                   </li>
                   <li
@@ -175,7 +175,7 @@
                      <a th:href="@{/notice/2}"
                      style="text-decoration: none; color: #333;"> <span
                         style="font-weight: bold;">[청소과]</span> 추석 연휴 기간 쓰레기 수거 일정 안내 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-05</span>
+                        style="float: right; color: #666; font-size: 14px; margin-left: 100px; ">2024-09-05</span>
                   </a>
                   </li>
                   <li
@@ -183,7 +183,7 @@
                      <a th:href="@{/notice/3}"
                      style="text-decoration: none; color: #333;"> <span
                         style="font-weight: bold;">[종합민원과]</span> 추석 연휴 무인민원발급기 이용 안내 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-10</span>
+                        style="float: right; color: #666; font-size: 14px; margin-left: 100px;">2024-09-10</span>
                   </a>
                   </li>
                   <li
@@ -191,77 +191,73 @@
                      <a th:href="@{/notice/4}"
                      style="text-decoration: none; color: #333;"> <span
                         style="font-weight: bold;">[종합민원과]</span> 추석 연휴기간 주차장 무료 이용 안내 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-12</span>
+                        style="float: right; color: #666; font-size: 14px; margin-left: 100px;">2024-09-12</span>
                   </a>
                   </li>
                </ul>
             </div>
          </div>
 
-         <!-- "이번주 행사일정" 섹션 -->
-         <div class="col-lg-4 col-md-6 mb-4">
+         <!-- 이번주 행사일정 카드 -->
+
+         <div class="col-lg-4 col-md-4 mb-4">
             <div class="card p-3 h-100"
-               style="border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+               style="border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); max-width: 100%;">
                <div class="event-header"
-                  style="text-align: left; padding-bottom: 50px; border-bottom: 2px solid #007bff;">
-                  <h4
-                     style="color: #007bff; font-weight: bold; font-size: 24px; display: inline-block; margin-right: 400px;">
+                  style="text-align: left; padding-bottom: 10px; border-bottom: 2px solid #007bff; width: 90%;">
+                  <h4 style="color: #007bff; font-weight: bold; font-size: 24px;">
                      이번주 행사일정</h4>
                </div>
                <ul style="list-style-type: none; padding: 5px;">
                   <li
-                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left; width: 600px;">
-                     <a th:href="@{/event/1}"
+                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
+                     <span
                      style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[서울시 문화]</span> 2024 서울 문화 축제 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-15</span>
-                  </a>
+                        style="font-weight: bold; margin-right: 5px;">[서울시 문화]</span> 2024 서울 문화 축제 <span
+                        style="float: right; color: #666; font-size: 14px; margin-left: 150px; ">2024-09-15</span>
+                  </span>
                   </li>
                   <li
                      style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/event/2}"
+                     <span
                      style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[서울시 환경]</span> 친환경 에너지 박람회 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-18</span>
-                  </a>
+                        style="font-weight: bold; margin-right: 5px;">[서울시 환경]</span> 친환경 에너지 박람회 <span
+                        style="float: right; color: #666; font-size: 14px; margin-left: 150px;">2024-09-18</span>
+                  </span>
                   </li>
                   <li
                      style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/event/3}"
+                     <span
                      style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[서울시 세미나]</span> 지속 가능 발전 세미나 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-20</span>
-                  </a>
+                        style="font-weight: bold; margin-right: 5px;">[서울시 세미나]</span> 지속 가능 발전 세미나 <span
+                        style="float: right; color: #666; font-size: 14px; margin-left: 150px;">2024-09-20</span>
+                  </span>
                   </li>
                   <li
                      style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/event/4}"
+                     <span
                      style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[서울시 세미나]</span> 친환경 에너지 정책 포럼 <span
-                        style="float: right; color: #666; font-size: 14px;">2024-09-20</span>
-                  </a>
+                        style="font-weight: bold; margin-right: 5px;">[서울시 세미나]</span> 친환경 에너지 정책 포럼 <span
+                        style="float: right; color: #666; font-size: 14px; margin-left: 150px;">2024-09-20</span>
+                  </span>
                   </li>
-
                </ul>
             </div>
          </div>
 
-         <!-- SNS 연결 카드 -->
-         <div class="col-lg-4 col-md-12 mb-4">
+
+         <!-- 서울시 SNS 카드 -->
+         <div class="col-lg-4 col-md-4 mb-4">
             <div class="card p-3 h-100"
-               style="border-radius: 10px; background-color: #f9f9f9; margin-bottom: 30px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
-               <!-- 제목과 밑줄을 추가 -->
+               style="border-radius: 10px; background-color: #f9f9f9; margin-bottom: 30px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); max-width: 100%;">
                <div class="sns-header"
-                  style="text-align: left; padding-bottom: 45px; border-bottom: 2px solid #007bff;">
-                  <h4
-                     style="color: #007bff; font-weight: bold; font-size: 24px; display: inline-block; margin-right: 450px;">
+                  style="text-align: left; padding-bottom: 10px; border-bottom: 2px solid #007bff; width: 95%;">
+                  <h4 style="color: #007bff; font-weight: bold; font-size: 25px; margin-top:20px;">
                      서울시 SNS</h4>
                </div>
-
-               <!-- SNS 이미지와 링크 -->
                <img th:src="@{/image/seoullogo.png}" class="card-img-top"
                   alt="Seoul SNS"
-                  style="height: 150px; width: 500px; object-fit: contain; border-radius: 10px;">
+                  style="height: 150px; width: 90%; object-fit: contain; border-radius: 10px;">
                <div class="d-flex justify-content-between align-items-center p-3">
                   <a href="https://www.facebook.com/seoul.kr" target="_blank"> <img
                      th:src="@{/image/facebook.png}" alt="Facebook"
@@ -286,7 +282,9 @@
                </div>
             </div>
          </div>
+
       </div>
+
    </main>
 	<div id="chatbot-load" th:insert="chatbot/chatbot.html :: chatbot"></div>
 </body>

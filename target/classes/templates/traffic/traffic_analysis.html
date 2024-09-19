@@ -28,7 +28,7 @@ h1.title {
 
 /* 중앙 정렬된 텍스트 스타일 */
 p.centered {
-   font-family: 'Lora', serif; /* 폰트 변경 */
+   font-family: 'Roboto', sans-serif;
    text-align: center; /* 중앙 정렬 */
    margin: 20px auto;
    max-width: 800px; /* 텍스트의 최대 너비 */
@@ -190,50 +190,6 @@ canvas {
    height: auto; /* 캔버스의 높이를 자동으로 설정 */
 }
 
-.sidebar {
-   width: 200px; /* 사이드바 너비 */
-   height: 40vh; /* 화면 전체 높이 */
-   background-color: #f4f4f4; /* 배경색 */
-   padding: 20px;
-   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-   position: fixed; /* 고정된 위치 */
-   left: 0; /* 화면의 왼쪽 끝에 위치 */
-   top: 10; /* 화면의 상단에 위치 */
-}
-
-
-/* 사이드바 제목 */
-.sidebar h2 {
-   margin-top: 0;
-   font-size: 24px;
-   color: #333;
-   text-align: center;
-}
-
-/* 메뉴 리스트 */
-.sidebar-menu {
-   list-style: none;
-   padding: 0;
-   margin: 0;
-}
-
-.sidebar-menu li {
-   margin: 15px 0;
-}
-
-.sidebar-menu a {
-   color: #333; /* 링크 색상 */
-   text-decoration: none; /* 밑줄 제거 */
-   font-size: 18px;
-   display: block;
-   padding: 10px;
-   border-radius: 4px;
-   transition: background-color 0.3s ease;
-}
-
-.sidebar-menu a:hover {
-   background-color: #ddd; /* 호버 시 배경색 변경 */
-}
 </style>
 </head>
 <body>
@@ -241,18 +197,11 @@ canvas {
 
 
     <div>
-        <p class="centered">모든 데이터는 2023년 12월 서울 기준으로 분석되었으며, 100%의 신뢰도는 아님에 유의한다.</p>
+        <p class="centered">*모든 데이터는 2023년 12월 서울 기준으로 분석되었으며, 100%의 신뢰도는 아님에 유의한다.*</p>
         
         <div class="container">
-           <div class="sidebar">
-        <h2>메뉴</h2>
-        <ul class="sidebar-menu">
-            <li><a href="#traffic_analysis">교통사고</a></li>
-            <li><a href="#weather">날씨</a></li>
-            <li><a href="#announcements">공지사항</a></li>
-            <li><a href="#chatbot">챗봇 상담</a></li>
-        </ul>
-    </div>
+           <div id="sidebar-load" th:insert="common/fragments/sidebar.html :: sidebar"></div>
+           
             <div class="card">
                 <canvas id="regressionChart1" width="600" height="400"></canvas>
                 <div class="card-body">

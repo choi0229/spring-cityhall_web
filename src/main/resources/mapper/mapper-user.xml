@@ -22,6 +22,7 @@
 		, user_email userEmail
 		, user_birth userBirth
 		, user_address userAddress
+		, user_manager managerId
 		from user where user_id = #{userId} and user_pw = #{userPw}
 	</select>
 	

@@ -39,7 +39,13 @@ public class UserController {
 	  
 	  
 	  @RequestMapping("/regformaction.do")
-	  public String insertReg(HttpServletRequest req,@RequestParam("id") String id, String pw, String email, String name, String nickname, String birth, String address) throws Exception {
+	  public String insertReg(HttpServletRequest req,@RequestParam("id") String id
+			  ,@RequestParam("pw") String pw
+			  ,@RequestParam("email") String email
+			  ,@RequestParam("name") String name
+			  ,@RequestParam("nickname") String nickname
+			  ,@RequestParam("birth") String birth
+			  ,@RequestParam("address") String address) throws Exception {
 		  User user = new User(id, pw, name, nickname, email, birth, address);
 		  dao.createUser(user);
 		  return "main";

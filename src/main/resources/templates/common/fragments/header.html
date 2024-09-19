@@ -30,6 +30,10 @@
 #mypage {
     margin-right: 20px;
 }
+
+a {
+	text-decoration: none;
+}
 </style>
 
 </head>
@@ -62,13 +66,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                <ul class="navbar-nav ms-auto">
                   <li class="nav-item"><a class="nav-link" th:href="@{/traffic.do}"
-                     style="margin-right: 50px; font-size: 20px;">교통안전사고</a></li>
+                     style="margin-right: 50px; font-size: 20px; color: black;">교통안전사고</a></li>
                   <li class="nav-item"><a class="nav-link" th:href="@{/rsv.do}"
-                     style="margin-right: 50px; font-size: 20px;">공공시설예약</a></li>
+                     style="margin-right: 50px; font-size: 20px; color: black;">공공시설예약</a></li>
                   <li class="nav-item"><a class="nav-link" href="#notices"
-                     style="margin-right: 50px; font-size: 20px;">이번주 날씨</a></li>
+                     style="margin-right: 50px; font-size: 20px; color: black;">이번주 날씨</a></li>
                   <li class="nav-item"><a class="nav-link" th:href="@{/travelMap.do}"
-                     style="font-size: 20px;">서울시 관광지도</a></li>
+                     style="font-size: 20px; color: black;">서울시 관광지도</a></li>
                </ul>
             </div>
          </div>
@@ -100,7 +104,7 @@
       const header = document.querySelector("header");
 
       // 스크롤 위치가 100px 이상일 때 조건을 확인
-      if (window.scrollY > 100) {
+      if (window.scrollY > 50) {
          // 스크롤이 100px 이상 내려가면 헤더의 배경색을 흰색으로 변경
          header.style.backgroundColor = "white";
       } else {

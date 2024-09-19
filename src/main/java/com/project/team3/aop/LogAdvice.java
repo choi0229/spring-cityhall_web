@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class LogAdvice {
 	
 	
-	@Before("execution(* com.project.team3.controller.Login*.*(..))")
+	@Before("execution(* com.project.team3.controller.user.Login*.*(..))")
 	//@Before("bean(*)")
 	public void beforeLog(JoinPoint jp) {
 		String methodName = jp.getSignature().getName();
