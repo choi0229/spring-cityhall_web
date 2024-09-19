@@ -11,6 +11,9 @@
 body {
 	font-family: 'SeoulNamsanM', Arial, sans-serif;
 	margin-top:130px;
+	min-height: 87vh; /* 최소 높이를 화면 전체 높이로 설정 */
+    display: flex;
+    flex-direction: column;
 }
 
 /* 전체적인 레이아웃 및 폰트 스타일 */
@@ -74,3 +77,25 @@ body {
     width: 100%;
     gap: 20px;
 }
+/* 이전 버튼 아이콘 검정색으로 변경 */
+    /* 이전 버튼 아이콘 굵게 */
+    .custom-prev-icon {
+        background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%23000000" viewBox="0 0 16 16"%3E%3Cpath d="M11.354 1.354a.5.5 0 1 0-.708-.708L4.293 6.293a1 1 0 0 0 0 1.414l6.353 6.353a.5.5 0 0 0 .708-.708L5 7.293l6.354-6.354z" stroke="black" stroke-width="2"/%3E%3C/svg%3E');
+        background-size: 150%, 150%; /* 아이콘 크기를 키움 */
+        width: 50px; /* 버튼 크기 확장 */
+        height: 50px;
+    }
+
+    /* 다음 버튼 아이콘 굵게 */
+    .custom-next-icon {
+        background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%23000000" viewBox="0 0 16 16"%3E%3Cpath d="M4.646 1.354a.5.5 0 1 1 .708-.708l6.353 6.353a1 1 0 0 1 0 1.414l-6.353 6.353a.5.5 0 0 1-.708-.708L11.293 7.293 4.646 1.646z" stroke="black" stroke-width="2"/%3E%3C/svg%3E');
+        background-size: 150%, 150%; /* 아이콘 크기를 키움 */
+        width: 50px; /* 버튼 크기 확장 */
+        height: 50px;
+    }
+
+
+    /* 호버 시 버튼 효과 */
+    .carousel-control-prev:hover, .carousel-control-next:hover {
+        transform: scale(1.1); /* 버튼을 살짝 확대 */
+    }

@@ -7,13 +7,12 @@
 
 .sidebar {
    width: 200px; /* 사이드바 너비 */
-   height: 50vh; /* 화면 전체 높이 */
+   height: 40vh; /* 화면 전체 높이 */
    background-color: #f4f4f4; /* 배경색 */
    padding: 20px;
    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
    position: fixed; /* 고정된 위치 */
-   left: 0; /* 화면의 왼쪽 끝에 위치 */
-   top: 10; /* 화면의 상단에 위치 */
+   left: 50px; /* 화면의 왼쪽 끝에 위치 */
 }
 
 /* 사이드바 제목 */
@@ -54,9 +53,9 @@
 	<div class="sidebar">
 		<h2>메뉴</h2>
 		<ul class="sidebar-menu">
+			<li><a th:href="@{/board.do}">공지사항</a></li>
 			<li><a th:href="@{/traffic.do}">교통사고</a></li>
 			<li><a th:href="@{/rsv.do}">공공시설 예약</a></li>
-			<li><a href="#announcements">공지사항</a></li>
 			<li><a th:href="@{/travelMap.do}">서울시 관광지도</a></li> 
 		</ul>
 	</div>

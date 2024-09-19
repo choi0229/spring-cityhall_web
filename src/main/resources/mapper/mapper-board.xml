@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper-board">
+
+    <select id="getBoardList" parameterType="map" resultType="com.project.team3.vo.Board">
+        select board_id AS boardId, 
+           board_title AS boardTitle, 
+            board_content AS boardContent, 
+            board_writer AS boardWriter, 
+            board_registration_date AS boardRegistrationDate
+        from board
+        order by board_id DESC 
+       LIMIT #{pageSize} OFFSET #{offset};
+    </select>
+
+   <select id="getTotalBoardCount" resultType="int">
+      select count(*) from board;
+   </select>
+   
+   <select id="getBoard" parameterType="int" resultType="com.project.team3.vo.Board">
+   select board_id AS boardId,
+      board_title AS boardTitle,
+      board_content AS boardContent,
+      board_writer AS boardWriter,
+      board_registration_date AS boardRegistrationDate
+   from board
+   where board_id = #{boardId}
+   </select>
+       
+    <insert id="setAddBoard" parameterType="com.project.team3.vo.Board">
+       insert into board (board_title, board_writer, board_content) values (#{boardTitle},#{boardWriter}, #{boardContent});
+    </insert>
+    
+    <delete id="deleteBoard" parameterType="int">
+       delete from board
+       where board_id = #{boardId};
+    </delete> 
+    
+    <update id="updateBoard" parameterType="com.project.team3.vo.Board">
+      update board
+      set board_title = #{boardTitle}, board_content = #{boardContent}
+      where board_id = #{boardId}
+   </update>
+    
+
+</mapper>

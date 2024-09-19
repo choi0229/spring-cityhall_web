@@ -25,7 +25,7 @@ public class TravelController {
     	User user = (User)session.getAttribute("userId");
     	req.setAttribute("user",user.userId);
     	req.setAttribute("travelList", travelList);
-        return "/travelMap"; 
+        return "/travel/travelMap"; 
     }
 
 }

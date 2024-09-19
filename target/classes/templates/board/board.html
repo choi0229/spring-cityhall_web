@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+        /* 전체 레이아웃 스타일 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .board-content {
+            margin-left: 450px;
+            margin-right: 450px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .announcement-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .announcement-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .announcement-header .date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .announcement-header .title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .announcement-header .title:hover {
+            color: #007bff;
+        }
+
+        .announcement-header .author {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .announcement-content {
+            font-size: 14px;
+            color: #555;
+            display: none;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .pagination a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* 등록 버튼 */
+        .form-group {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .button {
+            padding: 10px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff; /* 부트스트랩 파란색 */
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 class="title">공지사항 페이지</h1>
+
+    <div id="sidebar-load" th:insert="common/fragments/sidebar.html :: sidebar"></div>
+
+    <div class="board-content">
+
+        <!-- 공지사항을 각각의 카드로 보여줌 -->
+        <div th:each="board : ${boards}" class="announcement-box">
+            <div class="announcement-header">
+                <span class="date" th:text="${board.boardRegistrationDate}">2024-09-01</span>
+                <a class="title" th:href="@{/boardcontent.do?(id=${board.boardId})}"
+                   th:text="${board.boardTitle}">공지사항 제목 1</a>
+                <span class="author" th:text="'등록자: ' + ${board.boardWriter}">등록자: 홍길동</span>
+            </div>
+            <div class="announcement-content" th:text="${board.boardContent}">
+                <p>공지사항 내용 1</p>
+            </div>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination d-flex justify-content-center">
+            <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/board.do(page=${i})}" th:text="${i}"></a>
+            </span>
+        </div>
+
+        <!-- 공지 등록 버튼 -->
+        <div class="form-group">
+            <a href="/boardaddform.do" class="button" id="addBtn">공지 등록하기</a>
+        </div>
+
+    </div>
+
+    <script th:inline="javascript">
+        $(function() {
+            let manager = [[${user}]];
+            let managerId = manager.managerId;
+            $('#addBtn').on('click', function(e) {
+                e.preventDefault(); 
+                if (managerId == 0) {
+                    alert('권한이 없습니다.');
+                    return false;
+                } else {
+                    window.location.href = '/boardaddform.do';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
