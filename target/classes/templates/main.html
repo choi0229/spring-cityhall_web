@@ -14,23 +14,6 @@
    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
    rel="stylesheet">
 <link th:href="@{/css/main.css}" rel="stylesheet">
-<style>
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -20%);
-    }
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* 문구가 5초 후에 등장하는 스타일 */
-#seoul-city-text {
-    animation: fadeInUp 2s ease-in-out 5s forwards;
-}
-</style>
 </head>
 <body id="mainPage" style="margin: 0; min-height: 100vh; display: flex; flex-direction: column;">
 
@@ -195,41 +178,17 @@
                   <!-- 더하기 버튼을 오른쪽에 배치 -->
                   <a th:href="@{/board.do}"
                      style="color: #007bff; font-size: 20px; text-decoration: none;">+</a>
-               </div>
-               <ul style="list-style-type: none; padding: 10px;">
-                  <li
-                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/notice/1}"
-                     style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[보건행정과]</span> 2024 추석 명절 연휴기간 안내 <span
-                        style="float: right; color: #666; font-size: 14px; margin-left: 100px;">2024-09-01</span>
-                  </a>
-                  </li>
-                  <li
-                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/notice/2}"
-                     style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[청소과]</span> 추석 연휴 기간 쓰레기 수거 일정 안내 <span
-                        style="float: right; color: #666; font-size: 14px; margin-left: 100px; ">2024-09-05</span>
-                  </a>
-                  </li>
-                  <li
-                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/notice/3}"
-                     style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[종합민원과]</span> 추석 연휴 무인민원발급기 이용 안내 <span
-                        style="float: right; color: #666; font-size: 14px; margin-left: 100px;">2024-09-10</span>
-                  </a>
-                  </li>
-                  <li
-                     style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;">
-                     <a th:href="@{/notice/4}"
-                     style="text-decoration: none; color: #333;"> <span
-                        style="font-weight: bold;">[종합민원과]</span> 추석 연휴기간 주차장 무료 이용 안내 <span
-                        style="float: right; color: #666; font-size: 14px; margin-left: 100px;">2024-09-12</span>
-                  </a>
-                  </li>
-               </ul>
+               </div>               
+               <ul style="list-style-type: none; padding: 5px;">
+				   <li style="border-bottom: 1px solid #ddd; padding: 10px; font-size: 16px; text-align: left;"  th:each="board : ${boards}">
+				      <a th:href="@{/boardcontent.do?(id=${board.boardId})}">
+					      <span style="text-decoration: none; color: #333;"> 
+					         <span style="font-weight: bold; margin-right: 5px;" th:text="${board.boardTitle}"></span> 
+					         <span style="float: right; color: #666; font-size: 14px; margin-left: 30px;" th:text="${board.boardRegistrationDate}"></span>
+					      </span>
+				      </a>
+				   </li>
+				</ul>
             </div>
          </div>
 

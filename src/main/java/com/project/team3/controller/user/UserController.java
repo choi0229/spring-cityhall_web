@@ -48,14 +48,14 @@ public class UserController {
 			  ,@RequestParam("address") String address) throws Exception {
 		  User user = new User(id, pw, name, nickname, email, birth, address);
 		  dao.createUser(user);
-		  return "main";
+		  return "redirect:/main.do";
 		  
 	  }
 	  
 	  @RequestMapping("/logout.do")
 	  public String logout(HttpSession session) throws Exception {
 		  session.invalidate();
-		  return "main";
+		  return "redirect:/main.do";
 	  }
 	  
 	  @RequestMapping("/mypage.do")

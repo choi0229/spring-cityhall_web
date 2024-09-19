@@ -57,5 +57,10 @@ public class BoardDAO {
       return sqlSession.delete("deleteBoard", id);
 
    }
+   
+   public List<Board> getRecentBoards() {
+	      return sqlSession.selectList("getRecentBoards");
+
+	   }
 
 }

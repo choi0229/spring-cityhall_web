@@ -83,8 +83,7 @@ a {
       <div class="right-icons" style="font-size: 25px;">
          <!-- 로그인하지 않았을 때 -->
          <div th:if="${session.userId == null}">
-            <a th:href="@{/login.do}">로그인</a> <a th:href="@{/regForm.do}">회원가입</a>
-            <a th:href="@{/rsv.do}">예약</a>
+            <a th:href="@{/login.do}" class="me-3">로그인</a> <a th:href="@{/regForm.do}" class="me-3">회원가입</a>
          </div>
 
          <!-- 로그인했을 때 -->
