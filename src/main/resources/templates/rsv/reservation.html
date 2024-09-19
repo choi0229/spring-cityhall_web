@@ -239,10 +239,11 @@ h1.title {
 </style>
 </head>
 <body class="reservation-page">
-	<h1 class="title">공공시설 예약 페이지</h1>
+	<h1 class="title">공공시설 예약</h1>
 
 	<!-- 컨테이너 -->
 	<div class="container">
+		<div id="sidebar-load" th:insert="common/fragments/sidebar.html :: sidebar"></div>
 		<!-- 지도 및 탭 영역 -->
 		<div class="map-tab-container">
 			<!-- 지도 위에 탭을 세로로 배치 -->
@@ -273,8 +274,7 @@ h1.title {
 			<h5>예약 내역 <span id="facilityTitle">: 시설명</span></h5>
 			<div class="card-header">
 				<!-- 날짜 선택 -->
-				<input type="date" id="reservationDate" class="date-picker"
-					value="2024-09-13">
+				<input type="date" id="reservationDate" class="date-picker">
 			</div>
 			
 		   <!-- 추가: 시설 사진 및 정보 영역 -->
@@ -391,6 +391,7 @@ h1.title {
 	<!-- Kakao 지도 스크립트 -->
 	<script type="text/javascript"
 		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=333bda7da18df138fb4d9b3e5cf351c4"></script>
+	<script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
 
 	<script th:inline="javascript">
     	let timeslots = ([
@@ -807,6 +808,14 @@ h1.title {
             // ID가 일치하지 않으면 경고창 표시
             alert('삭제할 권한이 없습니다.');
         }
+    });
+    
+   
+    
+    $(document).ready(function() {
+        // dayjs를 사용하여 오늘 날짜를 'YYYY-MM-DD' 형식으로 가져와 설정
+        let today = dayjs().format('YYYY-MM-DD');
+        document.getElementById('reservationDate').value = today;
     });
     </script>
 </body>

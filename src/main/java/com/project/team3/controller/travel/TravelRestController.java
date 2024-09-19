@@ -50,13 +50,11 @@ public class TravelRestController {
     
     @GetMapping(value = "/comment.do")
     public List<Comment> getCommentListById(@RequestParam("courseId") int id) {
-    	System.out.println("실행");
         return dao.getCommentListById(id); // DAO에서 데이터를 받아와 반환
     }
 
     @GetMapping(value = "/commentAdd.do")
-    public int createComment(@RequestParam("courseId") int courseId, double rating, String details, HttpSession session) {
-    	System.out.println(courseId);
+    public int createComment(@RequestParam("courseId") int courseId,@RequestParam("rating") double rating, String details, HttpSession session) {
     	User user = (User)session.getAttribute("userId");
     	Comment comment = new Comment(details, user.userId, courseId, rating);
         return dao.createComment(comment); // DAO에서 데이터를 받아와 반환

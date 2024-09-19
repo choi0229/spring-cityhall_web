@@ -20,8 +20,30 @@ public class User {
 	public String userEmail;
 	public String userBirth;
 	public String userAddress;
+	public int managerId;
 
 	
+	public User(String userId, String userPw, String userName, String userNickname, String userEmail, String userBirth,
+			String userAddress, int managerId) {
+		super();
+		this.userId = userId;
+		this.userPw = userPw;
+		this.userName = userName;
+		this.userNickname = userNickname;
+		this.userEmail = userEmail;
+		this.userBirth = userBirth;
+		this.userAddress = userAddress;
+		this.managerId = managerId;
+	}
+
+	public int getManagerId() {
+		return managerId;
+	}
+
+	public void setManagerId(int managerId) {
+		this.managerId = managerId;
+	}
+
 	public User(String userId, String userPw) {
 		this.userId = userId;
 		this.userPw = userPw;
@@ -86,7 +108,8 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userPw=" + userPw + ", userName=" + userName + ", userNickname="
-				+ userNickname + ", userEmail=" + userEmail + "]";
+				+ userNickname + ", userEmail=" + userEmail + ", userBirth=" + userBirth + ", userAddress="
+				+ userAddress + ", managerId=" + managerId + "]";
 	}
 
 }

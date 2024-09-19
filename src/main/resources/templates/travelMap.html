@@ -48,7 +48,7 @@
         }
 
         #kakao-map {
-            height: 40vh;
+            height: 50vh;
             width: 100%;
             margin-top: 20px;
             display: none;
@@ -159,6 +159,7 @@
 <body>
 
     <div class="map-container">
+    <div id="sidebar-load" th:insert="common/fragments/sidebar.html :: sidebar"></div>
         <div id="map"></div>
 
         <!-- 선택한 관광지 이름이 표시될 부분 -->
@@ -306,6 +307,22 @@
                                 <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <h5>코스: ${course.attraction1Name} -> ${course.attraction2Name} -> ${course.attraction3Name}</h4>
+	                                <div class="rating d-flex" id="rating-${course.courseId}">
+		                                <input type="radio" id="star5-${course.courseId}" name="rating-${course.courseId}" value="5"/>
+		                                <label for="star5-${course.courseId}" title="5 stars">★</label>
+		
+		                                <input type="radio" id="star4-${course.courseId}" name="rating-${course.courseId}" value="4"/>
+		                                <label for="star4-${course.courseId}" title="4 stars">★</label>
+		
+		                                <input type="radio" id="star3-${course.courseId}" name="rating-${course.courseId}" value="3"/>
+		                                <label for="star3-${course.courseId}" title="3 stars">★</label>
+		
+		                                <input type="radio" id="star2-${course.courseId}" name="rating-${course.courseId}" value="2"/>
+		                                <label for="star2-${course.courseId}" title="2 stars">★</label>
+		
+		                                <input type="radio" id="star1-${course.courseId}" name="rating-${course.courseId}" value="1"/>
+		                                <label for="starl1-${course.courseId}" title="1 star">★</label>
+		                            </div>
 
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" id="commentContent" placeholder="댓글입력" aria-label="Recipient's username" aria-describedby="commentAddBtn" required>
@@ -445,25 +462,41 @@
         
         // 아코디언 아이템 내의 accordion-button에서 courseId를 가져옵니다.
         var courseId = accordionItem.find('.accordion-button').data('course-id');
+
+        // courseId가 제대로 할당되었는지 확인
+        console.log("Course ID: " + courseId);
+
+        if (!courseId) {
+            console.error("Course ID is undefined. Please check if the data-course-id attribute is correctly set.");
+            return;
+        }
+        
+        // 평점 선택 확인
+        let selectedRating = accordionItem.find(`input[name="rating-${courseId}"]:checked`).val();
+        if (!selectedRating) {
+            alert("별점을 선택해 주세요!");
+            return;
+        }
         
         // AJAX 요청을 통해 댓글을 추가합니다.
         $.ajax({
             type: 'GET',
             url: 'commentAdd.do',
             data: {
-                rating: Number(accordionItem.find(`input[name="rating-${courseId}"]:checked`).val()), // 선택한 평점
+                rating: Number(selectedRating), // 선택한 평점
                 courseId: courseId,  // 가져온 courseId
                 details: accordionItem.find('#commentContent').val()  // 입력된 댓글 내용
             },
             success: function(result) {
                 alert('댓글이 추가되었습니다');
-                window.location.href='/travelMap.do'
+                window.location.href = '/travelMap.do';
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", error);
             }
         });
     });
+
     
     // 댓글 수정하기 모달열기
     $(document).on('click','#showUpdateModal', function(){
@@ -512,7 +545,6 @@
             // ID가 일치하면 모달 열기
             $('#commentDetail').val($(this).data('comment-details')); 
             
-            $('#commentUpdateModal').modal('show');  // 모달 열기
         } else {
             // ID가 일치하지 않으면 경고창 표시
             alert('삭제할 권한이 없습니다.');
