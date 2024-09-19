@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/defaultLayout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>공공시설 예약 페이지</title>
+<!-- Bootstrap CSS 추가 -->
+
+<style>
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    margin-top: 130px;
+    padding: 0;
+    color: #333;
+    font-size: 0.75rem; /* 기본 폰트 크기 더 축소 */
+    height: 90vh; /* 화면 높이 줄이기 */
+    overflow-y: hidden; /* 세로 스크롤을 제한 */
+}
+
+h1.title {
+    text-align: center;
+    color: #3a3f51;
+    margin-top: 5px; /* 상단 여백 줄이기 */
+    margin-bottom: 5px; /* 하단 여백 줄이기 */
+    font-size: 1.5rem; /* 타이틀 크기 축소 */
+    font-weight: 600;
+}
+
+/* 컨테이너 레이아웃 */
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    background-color: #ffffff;
+    margin: 10px auto; /* 마진 축소 */
+    padding: 10px; /* 패딩 축소 */
+    width: 95%;
+    max-width: 950px; /* 최대 너비 축소 */
+    border-radius: 8px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+    gap: 10px; /* 간격 축소 */
+    height: 72vh; /* 전체 컨테이너 높이 줄이기 */
+}
+
+/* 지도와 탭을 포함한 레이아웃 */
+.map-tab-container {
+    position: relative;
+    width: 60%;
+    height: 70vh; /* 높이를 더 줄이기 */
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+/* 탭을 지도의 왼쪽에 세로로 배치 */
+.tab-container {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px; /* 간격 축소 */
+    z-index: 1000;
+}
+
+.tab-item {
+    padding: 6px 10px; /* 패딩 축소 */
+    font-size: 0.75rem; /* 폰트 크기 축소 */
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.tab-item:hover, .tab-item.active {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* 지도 영역 */
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+/* 카드 컨테이너 */
+.card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px; /* 패딩 축소 */
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    height: 100%; /* 카드 전체 높이를 컨테이너에 맞춤 */
+}
+
+.card-header {
+    margin-bottom: 8px; /* 마진 축소 */
+    font-weight: 600;
+    font-size: 1rem; /* 폰트 크기 축소 */
+    display: flex;
+    align-items: center;
+    color: #495057;
+}
+
+.card-body {
+    padding: 0px;
+    overflow-y: auto; /* 카드 내용 스크롤 가능하게 */
+}
+
+/* 날짜 선택 스타일 */
+.date-picker {
+    width: 100%;
+    padding: 6px; /* 패딩 축소 */
+    font-size: 0.75rem; /* 폰트 크기 축소 */
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+.date-picker:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 시간표 스타일 */
+.schedule {
+    display: grid;
+    grid-template-columns: 1fr; /* 한 줄로 꽉 차게 설정 */
+    gap: 6px; /* 간격 축소 */
+    width: 100%; /* 부모 요소에 맞게 꽉 차도록 설정 */
+}
+
+.schedule div {
+    width: 100%; /* 각 시간 항목이 양쪽 여백 없이 꽉 차게 설정 */
+    padding: 6px; /* 패딩 살짝 확대 */
+    border-radius: 6px;
+    background-color: #f0f2f5;
+    border: 1px solid #ced4da;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 0.75rem; /* 폰트 크기 축소 */
+    font-weight: 500;
+    height: auto; /* 높이 자동 조정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    word-wrap: break-word; /* 텍스트 자동 줄바꿈 */
+}
+
+/* 예약된 항목의 스타일 */
+.schedule div.reserved {
+    background-color: rgba(255, 0, 0, 0.25); 
+    color: #721c24;
+    font-weight: bold;
+    min-height: 50px; /* 최소 높이 설정 */
+}
+
+
+
+/* 예약 버튼 스타일 */
+.add-reservation-btn {
+    background-color: #007bff;
+    color: white;
+    margin-top: 5px;
+    padding: 8px; /* 패딩 축소 */
+    font-size: 0.85rem; /* 버튼 폰트 크기 축소 */
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.add-reservation-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .map-tab-container {
+        width: 100%;
+        height: 40vh; /* 모바일 화면에서 지도 높이 축소 */
+        margin-bottom: 10px;
+    }
+    .card {
+        width: 100%;
+    }
+}
+
+.modal-body .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.modal-body .form-group label {
+    min-width: 80px; /* 라벨 크기 축소 */
+    margin-right: 8px;
+}
+
+.modal-body .form-group input[type="time"] {
+    width: 48%;
+}
+
+.modal-body .form-group .time-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.modal-body .form-group .time-range input {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.modal-body .form-group .time-range span {
+    white-space: nowrap;
+}
+
+</style>
+</head>
+<body class="reservation-page">
+	<h1 class="title">공공시설 예약 페이지</h1>
+
+	<!-- 컨테이너 -->
+	<div class="container">
+		<!-- 지도 및 탭 영역 -->
+		<div class="map-tab-container">
+			<!-- 지도 위에 탭을 세로로 배치 -->
+			<div class="btn-group tab-container" role="group"
+				aria-label="Basic example" id="mapBtn">
+				<input type="radio" class="btn-check" name="options" id="option1"
+					autocomplete="off" value="all" checked> <label
+					class="btn btn-outline-secondary tab-item btn-sm" for="option1">전체</label>
+
+				<input type="radio" class="btn-check" name="options" id="option2"
+					autocomplete="off" value="체육시설"> <label
+					class="btn btn-outline-secondary tab-item btn-sm" for="option2">체육관</label>
+
+				<input type="radio" class="btn-check" name="options" id="option3"
+					autocomplete="off" value="공연장"> <label
+					class="btn btn-outline-secondary tab-item btn-sm" for="option3">공연장</label>
+
+				<input type="radio" class="btn-check" name="options" id="option4"
+					autocomplete="off" value="문화시설"> <label
+					class="btn btn-outline-secondary tab-item btn-sm" for="option4">문화시설</label>
+			</div>
+			<!-- 지도 영역 -->
+			<div id="map"></div>
+		</div>
+
+		<!-- 예약 카드 -->
+		<div class="card">
+			<h5>예약 내역 <span id="facilityTitle">: 시설명</span></h5>
+			<div class="card-header">
+				<!-- 날짜 선택 -->
+				<input type="date" id="reservationDate" class="date-picker"
+					value="2024-09-13">
+			</div>
+			
+		   <!-- 추가: 시설 사진 및 정보 영역 -->
+			<div id="facility-info" style="margin-bottom: 20px;">
+			    <img id="facility-photo" th:src="@{/image/default.jpg}" alt="시설 사진" style="width: 90%; height: 100px; border-radius: 8px;"/>
+			    <p id="facility-description">시설 설명이 여기에 나타납니다.</p>
+			</div>
+				
+				<div class="card-body">
+					<div class="schedule-scroll">
+						<!-- 시간 선택 -->
+						<div class="schedule">
+							<div>09:00</div>
+							<div>10:00</div>
+							<div>11:00</div>
+							<div>12:00</div>
+							<div>13:00</div>
+							<div>14:00</div>
+							<div>15:00</div>
+							<div>16:00</div>
+							<div>17:00</div>
+							<div>18:00</div>
+							<div>19:00</div>
+							<div>20:00</div>
+							<div>21:00</div>
+							<div>22:00</div>
+						</div>
+					</div>
+				</div>
+				<!-- 예약 추가 버튼 -->
+				<button class="add-reservation-btn" id="showModalBtn"
+					data-bs-toggle="modal" data-bs-target="#rsvAddModal">예약하기</button>
+			</div>
+		</div>
+	
+		<!-- 추가하기 모달 : 시작 -->
+		<div class="modal" id="rsvAddModal" tabindex="-1">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title">예약하기</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="form-group">
+		                    <label for="reservationName">예약명</label>
+		                    <input type="text" id="reservationNameInput" class="form-control" required>
+		                </div>
+		                <div class="form-group">
+		                    <label for="reservationDate">일자</label>
+		                    <input type="date" id="reservationDateInput" class="form-control" required>
+		                </div>
+		                <div class="form-group">
+		                    <label for="participants">참가자</label>
+		                    <input type="text" id="participantsInput" class="form-control" required>
+		                </div>
+		                <div class="form-group">
+		                    <label for="startTime">시간</label>
+		                    <div class="time-range">
+		                        <input type="time" id="startTimeInput" class="form-control" min="09:00" max="22:00" required>
+		                        <span>~</span>
+		                        <input type="time" id="endTimeInput" class="form-control" min="09:00" max="22:00" required>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		                <button type="button" class="btn btn-primary" id="reservationBtn">예약하기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!-- 추가하기 모달 : 끝 -->
+		
+		<!-- 수정하기 모달 : 시작 -->
+		<div class="modal" id="rsvUpdateModal" tabindex="-1">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title">수정하기</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		            </div>
+		            <div class="modal-body">
+		                <div class="form-group">
+		                    <label for="reservationNameUpdate">예약명</label>
+		                    <input type="text" id="reservationNameUpdate" class="form-control" required>
+		                </div>
+		                <div class="form-group">
+		                    <label for="reservationDateUpdate">일자</label>
+		                    <input type="date" id="reservationDateUpdate" class="form-control" required>
+		                </div>
+		                <div class="form-group">
+		                    <label for="participants">참가자</label>
+		                    <input type="text" id="participantsUpdate" class="form-control" required>
+		                </div>
+		                <div class="form-group">
+		                    <label for="startTimeUpdate">시간</label>
+		                    <div class="time-range">
+		                        <input type="time" id="startTimeUpdate" class="form-control" min="09:00" max="22:00" required>
+		                        <span>~</span>
+		                        <input type="time" id="endTimeUpdate" class="form-control" min="09:00" max="22:00" required>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		                <button type="button" class="btn btn-primary" id="rsvUpdateBtn">수정하기</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!-- 수정하기 모달 : 끝 -->
+
+	<!-- Kakao 지도 스크립트 -->
+	<script type="text/javascript"
+		src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=333bda7da18df138fb4d9b3e5cf351c4"></script>
+
+	<script th:inline="javascript">
+    	let timeslots = ([
+    		{time: '09:00',reserved: false},
+    		{time: '10:00',reserved: false},
+    		{time: '11:00',reserved: false},
+    		{time: '12:00',reserved: false},
+    		{time: '13:00',reserved: false},
+    		{time: '14:00',reserved: false},
+    		{time: '15:00',reserved: false},
+    		{time: '16:00',reserved: false},
+    		{time: '17:00',reserved: false},
+    		{time: '18:00',reserved: false},
+    		{time: '19:00',reserved: false},
+    		{time: '20:00',reserved: false},
+    		{time: '21:00',reserved: false},
+    		{time: '22:00',reserved: false}
+    	])
+    	
+    	let selectedFacilityId = null; // 선택된 시설물 ID를 저장할 변수
+    	let selectedReservationId = null; // 전역 변수로 reservationId를 저장
+    
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(37.56677914878755, 126.97862963358072),
+            level: 3
+        };
+        var map = new kakao.maps.Map(container, options);
+
+     // 마커 이미지 설정
+        var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+        $(function () {
+            // 페이지가 로딩되면 'all' 타입으로 첫 번째 Ajax 요청을 보냅니다.
+            loadFacilities("all");
+
+            // 각 라디오 버튼 클릭 시에 Ajax 요청을 처리합니다.
+            $("input:radio[name=options]").on('click', function () {
+                let facilityType = $("input:radio[name=options]:checked").val();
+                loadFacilities(facilityType); // 선택된 타입에 따라 Ajax 요청
+            });
+        });
+
+        // 마커 배열을 저장하는 변수
+        var markers = [];
+
+        // 기존 마커를 제거하는 함수
+        function removeMarkers() {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null); // 지도에서 마커를 제거
+            }
+            markers = []; // 마커 배열 초기화
+        }
+
+        // 시설 목록을 불러오는 함수 (Ajax 요청 처리)
+        function loadFacilities(facilityType) {
+            console.log(facilityType); // 디버깅용 로그
+
+            $.ajax({
+                type: "POST",
+                url: "facilities.do", // 서버로부터 시설 데이터를 받아오는 경로
+                data: {
+                    facilityType: facilityType
+                },
+                success: function (result) {
+                    // 기존 마커를 먼저 제거합니다
+                    removeMarkers();
+
+                    // 새로 받아온 시설 정보로 마커를 생성합니다
+                    result.forEach(facility => {
+                        var imageSize = new kakao.maps.Size(24, 35);
+                        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                        // 마커를 지도에 표시합니다
+                        var marker = new kakao.maps.Marker({
+                            map: map,
+                            position: new kakao.maps.LatLng(facility.lat, facility.lon),
+                            title: facility.facilityName // 마커에 대한 정보
+                        });
+
+                        // 마커 클릭 시 시설 정보를 표시
+                        kakao.maps.event.addListener(marker, 'click', function () {
+                            selectedFacilityId = facility.facilityId;
+                            
+                            // 시설명을 표시할 요소에 시설명 출력
+                            document.getElementById('facilityTitle').innerText = facility.facilityName;
+                            
+                            // 시설 사진과 설명 추가@{/image/default.jpg}
+                           	document.getElementById('facility-photo').src = `/image/${facility.facilityImg}`; // DB에서 불러온 사진 경로
+							document.getElementById('facility-description').innerText = facility.details; // DB에서 불러온 설명
+                            // 예약 목록 가져오기
+                            $.ajax({
+                                type: 'POST',
+                                url: 'rsvList.do',
+                                data: {
+                                    facilityId: facility.facilityId,
+                                    reservationDate: $('#reservationDate').val()
+                                },
+                                success: function (result) {
+                                    let reservations;
+
+                                    if (Array.isArray(result)) {
+                                        reservations = result;
+                                    } else if (result.data && Array.isArray(result.data)) {
+                                        reservations = result.data;
+                                    } else if (typeof result === 'object') {
+                                        reservations = [result];
+                                    } else {
+                                        console.error("Unexpected data format", result);
+                                        return;
+                                    }
+
+                                    updateTimeslots(reservations);
+                                }
+                            });
+                        });
+
+                        // 새 마커를 배열에 저장하여 나중에 제거할 수 있게 합니다
+                        markers.push(marker);
+                    });
+                },
+                error: function (err) {
+                    console.log("Error: ", err);
+                }
+            });
+        }
+
+        // 시간표 업데이트 함수
+        function updateTimeslots(reservations) {
+            // 기존 timeslots를 초기화
+            timeslots.forEach(slot => {
+                slot.reserved = false;
+                slot.title = '';
+                slot.participants = '';
+                slot.startHour = '';
+                slot.endHour = '';
+                slot.userId = null;
+            });
+
+            // 예약 데이터 반영
+            reservations.forEach(reservation => {
+                const startHour = parseInt(reservation.startHour.split(':')[0], 10); // 시작 시간
+                const endHour = parseInt(reservation.endHour.split(':')[0], 10); // 종료 시간
+
+                for (let i = startHour; i < endHour; i++) {
+                    let timeSlot = timeslots.find(slot => parseInt(slot.time.split(':')[0], 10) === i);
+                    if (timeSlot) {
+                        timeSlot.reserved = true;
+                        timeSlot.reservationId = reservation.reservationId;
+                        timeSlot.title = reservation.reservationName;
+                        timeSlot.participants = reservation.participants;
+                        timeSlot.startHour = reservation.startHour;
+                        timeSlot.endHour = reservation.endHour;
+                        timeSlot.userId = reservation.userId;
+                    }
+                }
+            });
+
+            renderTimeslots();
+        }
+
+     // 시간표 렌더링 함수
+    function renderTimeslots() {
+	    let scheduleHtml = '';
+	    let lastTitle = ''; // To track the last event title
+	
+	    timeslots.forEach(slot => {
+	        if (slot.reserved) {
+	            if (slot.title !== lastTitle) {
+	            	console.log(slot.startHour)
+	                // Only show the full details for the first occurrence of the event
+	                scheduleHtml += `
+	                    <div style="background-color: rgba(255, 0, 0, 0.25); font-weight: bold;">
+	                        <span style="margin-top:5px;">${slot.time}
+	                        <button class="btn btn-primary btn-sm" 
+	                            style="margin-left:150px; font-size: 10px; padding: 2px 5px;" 
+	                            id="showUpdateModal"
+	                            data-reservation-id="${slot.reservationId}"
+	                            data-reservation-user-id="${slot.userId}"
+	                            data-reservation-title="${slot.title}"
+	                            data-reservation-participants="${slot.participants}"
+	                            data-reservation-start-hour="${slot.startHour}"
+	                            data-reservation-end-hour="${slot.endHour}">
+	                        수정
+	                    </button>
+	                            <button class="btn btn-danger btn-sm"
+	                            	style="font-size: 10px; padding: 2px 5px;"
+	                            	id="rsvDeleteBtn"
+	                            	data-reservation-id="${slot.reservationId}"
+	                            	data-reservation-user-id="${slot.userId}">
+	                            삭제
+	                        </button>
+	                        </span>
+	                        <span style="font-size: 0.75rem; font-weight: bold;">행사명 : ${slot.title}</span>
+	                        <span style="font-size: 0.75rem; font-weight: bold;">참가자: ${slot.participants}</span>
+	                    </div>`;
+	            } else {
+	                // If it's the same event, only show the time for the subsequent time slots
+	                scheduleHtml += `
+	                    <div style="background-color: rgba(255, 0, 0, 0.25); font-weight: bold;">
+	                        <span>${slot.time}</span>
+	                    </div>`;
+	            }
+	            lastTitle = slot.title; // Update the lastTitle for the next iteration
+	        } else {
+	            scheduleHtml += `<div style="font-weight: bold;">${slot.time}</div>`;
+	        }
+	    });
+	
+	    $('.schedule').html(scheduleHtml);
+	}
+     
+    
+     // 예약하기 요청
+     $(function(){
+	    $('#reservationBtn').on('click',()=>{
+	    	console.log("선택된 시설물 ID: ", selectedFacilityId);
+	        // 시설물 클릭 안하고 예약 버튼 누를경우 alert
+	        if (selectedFacilityId === null) {
+	            alert("시설을 먼저 선택해주세요.");
+	            return;
+	        }
+	
+	        const startTime = $('#startTimeInput').val();
+	        const endTime = $('#endTimeInput').val();
+	        const reservationDate = $('#reservationDateInput').val();
+	        
+	        const startMinutes = startTime.split(':')[1];
+	        const endMinutes = endTime.split(':')[1];
+	        
+	        if (startMinutes !== '00' || endMinutes !== '00') {
+	            alert("정확한 정각 시간을 입력해주세요 (예: 09:00, 10:00 등).");
+	            return;
+	        }
+	
+	        // 서버에 기존 예약과 겹치는지 확인 요청
+	        $.ajax({
+	            type: "POST",
+	            url: "checkOverlap.do",  // 서버에서 예약 시간 겹침을 확인할 엔드포인트
+	            data: {
+	                facilityId: selectedFacilityId,
+	                reservationDate: reservationDate,
+	                startTime: startTime,
+	                endTime: endTime
+	            },
+	            success: function(response){
+	                if (response.isOverlap) {
+	                    // 시간이 겹친다면 예약 불가 알림
+	                    alert("선택한 시간대에 이미 예약이 있습니다.");
+	                } else {
+	                    // 시간이 겹치지 않는다면 예약 요청
+	                    $.ajax({
+	                        type:"POST",
+	                        url:"createRsv.do",
+	                        data: {
+	                            reservationName : $('#reservationNameInput').val(),
+	                            reservationDate : reservationDate,
+	                            participants : $('#participantsInput').val(),
+	                            facilityId : selectedFacilityId,
+	                            startTime : startTime,
+	                            endTime : endTime
+	                        },
+	                        success : function(result){
+	                        	alert('예약되었습니다.');
+	                           window.location.href = '/rsv.do';
+	                        }
+	                    });
+	                }
+	            }
+	        });
+	    });
+	});
+     
+     
+     // 카드 헤더 날짜 변경시 날자에 맞는 내용 조회
+    $(function(){
+    	 $('#reservationDate').on('change',()=>{
+    	 $.ajax({
+    		 type:"POST",
+    		 url:"rsvList.do",
+    		 data:{
+    			facilityId : selectedFacilityId,
+         		reservationDate : $('#reservationDate').val()
+    		 },
+    		 success: function(result) {
+         		// 예시로 받은 예약 데이터를 사용하여 timeslots 업데이트
+         		let reservations;
+         	    
+         	    if (Array.isArray(result)) {
+         	        // result 자체가 배열이면 바로 사용
+         	        reservations = result;
+         	    } else if (result.data && Array.isArray(result.data)) {
+         	        // result.data가 배열이면 그걸 사용
+         	        reservations = result.data;
+         	    } else if (typeof result === 'object') {
+         	        // result가 단일 객체일 때도 배열로 변환
+         	        reservations = [result];
+         	    } else {
+         	        console.error("Unexpected data format", result);
+         	        return;  // 데이터 형식이 맞지 않으면 함수 중단
+         	    }
+
+         	    updateTimeslots(reservations);
+
+         	}
+    	 })
+     })
+
+    })
+     
+ // 수정하기 모달 열기
+    $(document).on('click', '#showUpdateModal', function () {
+        // 로그인된 사용자 ID (서버에서 받아온 값)
+        let loggedInUserId = [[${user}]];  // Thymeleaf에서 로그인된 사용자 ID를 넘겨주는 방식
+        // 예약한 사용자 ID
+        let reservationUserId = $(this).data('reservation-user-id');  // HTML에 data 속성으로 등록된 ID
+        
+        selectedReservationId = $(this).data('reservation-id');
+        
+        // 로그인된 사용자와 예약한 사용자의 ID가 같은지 확인
+        if (loggedInUserId == reservationUserId) {
+            // ID가 일치하면 모달 열기
+            $('#reservationNameUpdate').val($(this).data('reservation-title')); 
+            $('#reservationDateUpdate').val($('#reservationDate').val()); 
+            $('#participantsUpdate').val($(this).data('reservation-participants')); 
+            $('#startTimeUpdate').val($(this).data('reservation-start-hour')); 
+            $('#endTimeUpdate').val($(this).data('reservation-end-hour')); 
+            $('#rsvUpdateModal').modal('show');  // 모달 열기
+        } else {
+            // ID가 일치하지 않으면 경고창 표시
+            alert('수정할 권한이 없습니다.');
+        }
+    });
+
+ // 수정하기
+    $(function () {
+        $('#rsvUpdateBtn').on('click', ()=> {
+            const startTime = $('#startTimeUpdate').val();
+            const endTime = $('#endTimeUpdate').val();
+            const reservationDate = $('#reservationDateUpdate').val();
+
+            const startMinutes = startTime.split(':')[1];
+            const endMinutes = endTime.split(':')[1];
+
+            if (startMinutes !== '00' || endMinutes !== '00') {
+                alert("정확한 정각 시간을 입력해주세요 (예: 09:00, 10:00 등).");
+                return;
+            }
+
+            // 서버에 기존 예약과 겹치는지 확인 요청
+            $.ajax({
+                type: "POST",
+                url: "checkOverlap.do", // 서버에서 예약 시간 겹침을 확인할 엔드포인트
+                data: {
+                    facilityId: selectedFacilityId,
+                    reservationDate: reservationDate,
+                    startTime: startTime,
+                    endTime: endTime
+                },
+                success: function (response) {
+                    if (response.isOverlap) {
+                        // 시간이 겹친다면 예약 불가 알림
+                        alert("선택한 시간대에 이미 예약이 있습니다.");
+                    } else {
+                        // 시간이 겹치지 않는다면 예약 요청
+                        $.ajax({
+                            type: "POST",
+                            url: "updateRsv.do",
+                            data: {
+                                reservationId: selectedReservationId,
+                                reservationName: $('#reservationNameUpdate').val(),
+                                reservationDate: reservationDate,
+                                participants: $('#participantsUpdate').val(),
+                                facilityId: selectedFacilityId,
+                                startTime: startTime,
+                                endTime: endTime
+                            },
+                            success: function (result) {
+                            	alert('수정되었습니다.');
+                                window.location.href = '/rsv.do';
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+ 
+    $(document).on('click', '#rsvDeleteBtn', function() {
+        // 로그인된 사용자 ID (서버에서 받아온 값)
+        let loggedInUserId = /*[[${user}]]*/ 'defaultUser'; // 여기에 실제 Thymeleaf 값을 삽입
+		console.log('로그인'+loggedInUserId);
+        // 클릭된 버튼에서 예약한 사용자 ID와 예약 ID 가져오기
+        let reservationUserId = $(this).data('reservation-user-id');
+        let selectedReservationId = $(this).data('reservation-id');
+        console.log('예약'+reservationUserId)
+        // 로그인된 사용자와 예약한 사용자의 ID가 같은지 확인
+        if (loggedInUserId == reservationUserId) {
+            // 삭제하는지 다시한번 확인
+            if (confirm("정말 삭제하시겠습니까?")) {
+                $.ajax({
+                	type: "POST",
+                	url: "deleteRsv.do",
+                	data: {
+                		reservationId : selectedReservationId
+                	},
+                	success: function(result){
+                		alert('삭제되었습니다');
+                		window.location.href = '/rsv.do';
+                	}
+                })
+            }
+        } else {
+            // ID가 일치하지 않으면 경고창 표시
+            alert('삭제할 권한이 없습니다.');
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+
+/* 기본 폰트 적용 */
+@font-face {
+    font-family: 'SeoulNamsanM';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulNamsanM.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+	font-family: 'SeoulNamsanM', Arial, sans-serif;
+	margin-top:130px;
+}
+
+/* 전체적인 레이아웃 및 폰트 스타일 */
+#mainPage {
+    margin: 0;
+    font-family: 'SeoulNamsanM', Arial, sans-serif; /* 폰트를 전체에 적용 */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#mainPage .header-logo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* 링크 및 버튼 스타일 */
+#mainPage .link-button {
+    background-color: white;
+    color: #003366;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* 메인 콘텐츠 스타일 */
+#mainPage .main-content {
+    flex: 1;
+    padding: 40px 50px;
+    background-color: #f5f5f5;
+}
+
+/* 카드 공통 스타일 */
+#mainPage .card {
+    flex: 1;
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#mainPage .card-header {
+    font-size: 1.5em;
+    color: white;
+    background-color: #003366;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+#mainPage .flex-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper-rsv">
+
+	
+	
+	<select id="getFacilityList" resultType="com.project.team3.vo.Facility">
+		select facility_id facilityId
+		, facility_name facilityName
+		, facility_type dacilityType
+		, lon
+		, lat
+		, img facilityImg
+		, details facilityDetails
+		from facility
+	</select>
+	
+	<select id="getFacilityListByType" parameterType="String" resultType="com.project.team3.vo.Facility">
+		select facility_id facilityId
+		, facility_name facilityName
+		, facility_type facilityType
+		, lon
+		, lat
+		, img facilityImg
+		, details facilityDetails
+		from facility where facility_type = #{facilityType};
+	</select>
+	
+	<select id="getRsvList" parameterType="com.project.team3.vo.Reservation" resultType="com.project.team3.vo.Reservation">
+		select reservation_id reservationId
+		, reservation_name reservationName
+		, reservation_date reservationDate
+		, starthour
+		, endhour
+		, participants
+		, facility_id facilityId
+		, user_id userId
+		from reservation where facility_id = #{facilityId} and reservation_date = #{reservationDate};
+	</select>
+	
+	<insert id="createRsv" parameterType="com.project.team3.vo.Reservation">
+		insert into reservation (reservation_name, reservation_date, startHour, endHour, participants, facility_id, user_id)
+		values (#{reservationName}, #{reservationDate}, #{startHour}, #{endHour}, #{participants}, #{facilityId}, #{userId})
+	</insert>
+	
+	<select id="checkOverlap" parameterType="com.project.team3.vo.Reservation" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM reservation 
+	    WHERE facility_id = #{facilityId} 
+	      AND reservation_date = #{reservationDate}
+	      AND ( 
+	          (startHour &lt; #{endHour} AND endHour &gt; #{startHour}) 
+	      );
+	</select>
+
+	<update id="updateRsv" parameterType="com.project.team3.vo.Reservation">
+		update reservation set reservation_name = #{reservationName}
+		, reservation_date = #{reservationDate}
+		, starthour = #{startHour}
+		, endhour = #{endHour}
+		, participants = #{participants}
+		, facility_id = #{facilityId}
+		where reservation_id = #{reservationId}
+	</update>
+	
+	
+	<delete id="deleteRsv" parameterType="String">
+		delete from reservation where reservation_id = #{reservationId}
+	</delete>
+
+</mapper>

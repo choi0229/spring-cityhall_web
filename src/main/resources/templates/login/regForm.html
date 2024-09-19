@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{common/layouts/defaultLayout}"
+   layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<!-- Bootstrap CSS 링크 추가 -->
+<link
+   href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+   rel="stylesheet">
+<!-- jQuery 추가 -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+   crossorigin="anonymous"></script>
+</head>
+
+<body>
+   <!-- 회원가입 폼 컨테이너 -->
+   <div class="container mt-5">
+      <div class="row justify-content-center">
+         <div class="col-md-6" style="margin-top: 50px;">
+            <h2 class="text-center mb-4">회원가입</h2>
+
+            <!-- 회원가입 폼 -->
+            <div class="card">
+               <div class="card-body">
+                  <form action="regformaction.do">
+                     <!-- 아이디 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">아이디</p>
+                        <div class="col-sm-8">
+                           <div class="input-group">
+                              <input type="text" class="form-control" id="id" name="id"
+                                 placeholder="아이디" required>
+                              <div class="input-group-append">
+                                 <button type="button" id="idcheckbtn"
+                                    class="btn btn-secondary ml-2">중복확인</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- 비밀번호 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">비밀번호</p>
+                        <div class="col-sm-8">
+                           <input type="password" class="form-control" id="pw" name="pw"
+                              placeholder="비밀번호" required>
+                        </div>
+                     </div>
+
+                     <!-- 비밀번호 확인 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">비밀번호 확인</p>
+                        <div class="col-sm-8">
+                           <input type="password" class="form-control" id="pw2" name="pw2"
+                              placeholder="비밀번호 확인" required>
+                        </div>
+                     </div>
+
+                     <!-- 이메일 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">이메일</p>
+                        <div class="col-sm-8">
+                           <input type="text" class="form-control" id="email" name="email"
+                              placeholder="이메일" required>
+                        </div>
+                     </div>
+
+                     <!-- 이름 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">이름</p>
+                        <div class="col-sm-8">
+                           <input type="text" class="form-control" id="name" name="name"
+                              placeholder="이름" required>
+                        </div>
+                     </div>
+
+                     <!-- 닉네임 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">닉네임</p>
+                        <div class="col-sm-8">
+                           <input type="text" class="form-control" id="nickname"
+                              name="nickname" placeholder="닉네임" required>
+                        </div>
+                     </div>
+
+                     <!-- 생년월일 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">생년월일</p>
+                        <div class="col-sm-8">
+                           <input type="date" class="form-control" id="birth" name="birth"
+                              required>
+                        </div>
+                     </div>
+
+                     <!-- 거주지 입력 -->
+                     <div class="form-group row">
+                        <p class="col-sm-4 col-form-label">거주지</p>
+                        <div class="col-sm-8">
+                           <input class="form-control" type="text" id="address"
+                              name="address" required>
+                        </div>
+                     </div>
+
+                     <!-- 회원가입 버튼 -->
+                     <div class="form-group row">
+                        <div class="col-sm-12">
+                           <button type="submit" id="regBtn"
+                              class="btn btn-primary btn-block">회원가입</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- jQuery 및 Bootstrap JS 추가 -->
+   <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+   <!-- 회원가입 스크립트 -->
+   <script>
+        let idCheckStatus = 9;
+
+        // 아이디 중복 확인 버튼 클릭 이벤트
+        $('#idcheckbtn').on('click', (e) => {
+            $.ajax({
+                type: "get",
+                url: "idCheck.do",
+                data: {
+                    id: $("#id").val()
+                },
+                success: function (result) {
+                    if (result == 0) {
+                        idCheckStatus = 0;
+                        alert('이미 존재하는 아이디입니다.');
+                        $('#id').focus();
+                    } else {
+                        alert('사용 가능한 아이디입니다.');
+                        idCheckStatus = 1;
+                    }
+                }
+            });
+        });
+
+        // 회원가입 버튼 클릭 이벤트
+        $('#regBtn').on('click', (e) => {
+            if ($('#pw').val() != $('#pw2').val()) {
+                alert('비밀번호가 일치하지 않습니다.');
+                $('#pw').focus();
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
