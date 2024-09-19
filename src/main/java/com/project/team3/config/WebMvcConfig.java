@@ -20,7 +20,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.addInterceptor(loginInterceptor)
 				.addPathPatterns("/rsv.do")
 				.addPathPatterns("/mypage.do")
-				.addPathPatterns("/travelMap.do");
+				.addPathPatterns("/travelMap.do")
+				.addPathPatterns("/boardcontent.do")
+				.addPathPatterns("/boardaddform.do");
 	}
 
 }

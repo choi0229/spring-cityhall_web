@@ -41,6 +41,17 @@
       set board_title = #{boardTitle}, board_content = #{boardContent}
       where board_id = #{boardId}
    </update>
+   
+   <select id="getRecentBoards" resultType="com.project.team3.vo.Board">
+	   	select board_id AS boardId,
+	          board_title AS boardTitle,
+	          board_content AS boardContent,
+	          board_writer AS boardWriter,
+	          board_registration_date AS boardRegistrationDate
+	   from board
+	   order by board_registration_date desc
+	   limit 4
+   </select>
     
 
 </mapper>

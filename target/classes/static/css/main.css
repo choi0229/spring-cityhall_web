@@ -77,6 +77,22 @@ body {
     width: 100%;
     gap: 20px;
 }
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -20%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* 문구가 5초 후에 등장하는 스타일 */
+#seoul-city-text {
+    animation: fadeInUp 2s ease-in-out 5s forwards;
+}
+
 /* 이전 버튼 아이콘 검정색으로 변경 */
     /* 이전 버튼 아이콘 굵게 */
     .custom-prev-icon {
