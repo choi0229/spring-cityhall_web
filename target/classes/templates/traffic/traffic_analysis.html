@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>교통사고 분석</title>
+<!-- Google Fonts 링크 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap">
+<style>
+/* 기본 스타일 */
+body {
+   font-family: 'Roboto', sans-serif; /* 기본 폰트 */
+   color: #333;
+   line-height: 1.6;
+   margin: 0;
+   padding: 0;
+   background-color: #f4f4f4;
+}
+
+/* 제목 스타일 */
+h1.title {
+   text-align: center;
+   margin: 20px 0;
+   color: #333;
+}
+
+/* 중앙 정렬된 텍스트 스타일 */
+p.centered {
+   font-family: 'Lora', serif; /* 폰트 변경 */
+   text-align: center; /* 중앙 정렬 */
+   margin: 20px auto;
+   max-width: 800px; /* 텍스트의 최대 너비 */
+   color: #666;
+}
+
+/* 카드 컨테이너 스타일 */
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start; /* 카드들이 왼쪽부터 정렬되도록 설정 */
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-left: 270px; /* 사이드바 공간을 확보하기 위해 여백 추가 */
+    padding: 1rem;
+    max-width: calc(100% - 270px); /* 사이드바 크기를 제외한 나머지 화면을 사용 */
+}
+
+/* 카드 스타일 */
+.card {
+    flex: 1 1 28%; /* 카드 너비를 줄여서 3개가 화면에 배치될 수 있게 설정 */
+    max-width: 30%; /* 카드의 최대 너비를 30%로 제한 */
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 1rem; /* 카드 간의 간격 */
+}
+
+
+.card-body {
+   display: flex;
+   flex-direction: column;
+   align-items: center; /* 가운데 정렬 */
+   text-align: center; /* 가운데 정렬 */
+}
+
+.card-body h5 {
+   font-size: 16px;
+   font-weight: bold;
+   margin-bottom: 0.5rem;
+}
+
+.card-text {
+   font-size: 16px;
+   color: #333; /* 텍스트 색상 */
+}
+
+.card:hover {
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 카드 호버 시 그림자 강조 */
+}
+
+/* 옵션 선택 스타일 */
+.option {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin: 1rem 0; /* 옵션 간의 간격 */
+}
+
+.option label {
+   font-weight: bold;
+   margin-bottom: 5px;
+   color: #333;
+}
+
+select {
+   padding: 8px;
+   font-size: 16px;
+   width: 150px;
+   box-sizing: border-box;
+   border-radius: 4px; /* 둥근 모서리 */
+   border: 1px solid #ddd;
+   background-color: #fff;
+   transition: border-color 0.3s ease;
+}
+
+select:focus {
+   border-color: #007bff;
+   outline: none;
+}
+
+.calculation-box {
+   border: 1px solid #d1d1d1;
+   border-radius: 8px;
+   padding: 20px;
+   background-color: #f9f9f9;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   margin: 20px auto;
+   max-width: 900px;
+}
+
+.box-title {
+   font-size: 20px;
+   font-weight: bold;
+   margin-bottom: 20px;
+   text-align: center;
+}
+
+.option-container {
+   display: flex;
+   justify-content: space-between;
+   gap: 20px; /* 카드 간의 간격 */
+   margin-bottom: 20px;
+}
+
+.option {
+   flex: 1;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.option label {
+   font-weight: bold;
+   margin-bottom: 5px;
+}
+
+select {
+   padding: 8px;
+   font-size: 16px;
+   width: 100%;
+   box-sizing: border-box;
+}
+
+.button-container {
+   text-align: center;
+}
+
+button {
+   margin-top: 20px;
+   padding: 10px 20px;
+   font-size: 16px;
+   color: #fff;
+   background-color: #76c7c0; /* 더 진한 하늘색 */
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+   background-color: #4ba3a0; /* 호버 시 더 진한 하늘색 */
+   transform: scale(1.05); /* 버튼 호버 시 크기 약간 증가 */
+}
+
+/* 중앙 배치 스타일 */
+.button-container {
+   display: flex;
+   justify-content: center;
+   margin-top: 20px;
+}
+
+/* 캔버스 스타일 */
+canvas {
+   width: 100%; /* 캔버스의 너비를 카드에 맞게 설정 */
+   height: auto; /* 캔버스의 높이를 자동으로 설정 */
+}
+
+.sidebar {
+   width: 200px; /* 사이드바 너비 */
+   height: 40vh; /* 화면 전체 높이 */
+   background-color: #f4f4f4; /* 배경색 */
+   padding: 20px;
+   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+   position: fixed; /* 고정된 위치 */
+   left: 0; /* 화면의 왼쪽 끝에 위치 */
+   top: 10; /* 화면의 상단에 위치 */
+}
+
+
+/* 사이드바 제목 */
+.sidebar h2 {
+   margin-top: 0;
+   font-size: 24px;
+   color: #333;
+   text-align: center;
+}
+
+/* 메뉴 리스트 */
+.sidebar-menu {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+}
+
+.sidebar-menu li {
+   margin: 15px 0;
+}
+
+.sidebar-menu a {
+   color: #333; /* 링크 색상 */
+   text-decoration: none; /* 밑줄 제거 */
+   font-size: 18px;
+   display: block;
+   padding: 10px;
+   border-radius: 4px;
+   transition: background-color 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+   background-color: #ddd; /* 호버 시 배경색 변경 */
+}
+</style>
+</head>
+<body>
+    <h1 class="title">교통사고 분석 페이지</h1>
+
+
+    <div>
+        <p class="centered">모든 데이터는 2023년 12월 서울 기준으로 분석되었으며, 100%의 신뢰도는 아님에 유의한다.</p>
+        
+        <div class="container">
+           <div class="sidebar">
+        <h2>메뉴</h2>
+        <ul class="sidebar-menu">
+            <li><a href="#traffic_analysis">교통사고</a></li>
+            <li><a href="#weather">날씨</a></li>
+            <li><a href="#announcements">공지사항</a></li>
+            <li><a href="#chatbot">챗봇 상담</a></li>
+        </ul>
+    </div>
+            <div class="card">
+                <canvas id="regressionChart1" width="600" height="400"></canvas>
+                <div class="card-body">
+                    <h5>차종별 사고</h5>
+                    <p class="card-text">차량 종류별 회귀분석 결과는 승용차>화물차>이륜차>승합차>특수차 순으로 사고 확률이 높습니다.</p>
+                </div>
+            </div>
+            <div class="card">
+                <canvas id="regressionChart2" width="600" height="400"></canvas>
+                <div class="card-body">
+                    <h5>요일별 사고</h5>
+                    <p class="card-text">요일별 회귀분석 결과는 금요일>토요일>목요일>화요일>수요일>일요일>월요일 순으로 사고 확률이 높습니다.</p>
+                </div>
+            </div>
+            <div class="card">
+                <canvas id="regressionChart3" width="600" height="400"></canvas>
+                <div class="card-body">
+                    <h5>기상상태별 사고</h5>
+                    <p class="card-text">기상 상태별 회귀분석 결과는 맑음>흐림>눈>비 순으로 사고 확률이 높습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="calculation-box">
+    <h2 class="box-title">오늘의 사고 확률 계산하기</h2>
+    <div class="option-container">
+        <div class="option">
+            <label for="option1">차종</label>
+            <select id="option1" name="option1">
+                <option value="0.647277">승용차</option>
+                <option value="0.193657">화물차</option>
+                <option value="0.122096">이륜차</option>
+                <option value="0.036161">승합차</option>
+                <option value="0.000809">특수차</option>
+            </select>
+        </div>
+        
+        <div class="option">
+            <label for="option2">요일</label>
+            <select id="option2" name="option2">
+                <option value="0.000018">월요일</option>
+                <option value="0.176903">화요일</option>
+                <option value="0.139848">수요일</option>
+                <option value="0.179691">목요일</option>
+                <option value="0.221641">금요일</option>
+                <option value="0.187789">토요일</option>
+                <option value="0.094110">일요일</option>
+            </select>
+        </div>
+        
+        <div class="option">
+            <label for="option3">기상상태</label>
+            <select id="option3" name="option3">
+                <option value="0.929415">맑음</option>
+                <option value="0.047846">흐림</option>
+                <option value="0.009568">비</option>
+                <option value="0.013171">눈</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="button-container">
+        <button type="button" onclick="calculate()">확률 계산하기</button>
+    </div>
+</div>
+
+    
+    <!-- Chart.js 라이브러리 포함 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        const ctx1 = document.getElementById('regressionChart1').getContext('2d');
+        const regressionChart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['승용차', '화물차', '이륜차', '승합차', '특수차'],
+                datasets: [{
+                    label: '회귀계수',
+                    data: [223.8967, 66.9869, 42.2337, 12.5083, -0.2500],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '차종별 회귀계수'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '회귀계수'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '차종'
+                        }
+                    }
+                }
+            }
+        });
+        
+        const ctx2 = document.getElementById('regressionChart2').getContext('2d');
+        const regressionChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['금요일', '토요일', '목요일', '화요일', '수요일', '일요일', '월요일'],
+                datasets: [{
+                    label: '회귀계수',
+                    data: [0.221641, 0.187789, 0.179691, 0.176903, 0.139848, 0.094110, 0.000018],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(199, 199, 199, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(199, 199, 199, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '요일별 회귀계수'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '회귀계수'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '요일'
+                        }
+                    }
+                }
+            }
+        });
+        
+        const ctx3 = document.getElementById('regressionChart3').getContext('2d');
+        const regressionChart3 = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['맑음', '흐림', '눈', '비'],
+                datasets: [{
+                    label: '회귀계수',
+                    data: [459.2053, 23.6399, 6.5074, -4.7272],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '기상상태별 회귀계수'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '회귀계수'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: '기상상태'
+                        }
+                    }
+                }
+            }
+        });
+   
+        function calculate() {
+            const option1 = parseFloat(document.getElementById('option1').value);
+            const option2 = parseFloat(document.getElementById('option2').value);
+            const option3 = parseFloat(document.getElementById('option3').value);
+            const percent = (option1 * option2 * option3 * 100).toFixed(2);
+            
+            alert(`오늘 사고 확률: ${percent}%`);
+        }
+    </script>
+</body>
+</html>
