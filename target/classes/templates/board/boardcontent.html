@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>공지사항</title>
+<style>
+body {
+    font-family: 'Arial', sans-serif; /* 기본 폰트 설정 */
+    background-color: #f9f9f9; /* 배경색 */
+    margin: 0;
+    padding: 0;
+    min-height: 87vh; /* 최소 높이를 화면 전체 높이로 설정 */
+    display: flex;
+    flex-direction: column;
+}
+
+.card {
+    background-color: #fff; /* 카드 배경색 */
+    border: 1px solid #ddd; /* 카드 테두리 */
+    border-radius: 8px; /* 카드 모서리 둥글게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 카드 그림자 효과 */
+    padding: 20px; /* 카드 내부 여백 */
+    margin: 20px auto; /* 카드 외부 여백 (가운데 정렬) */
+    max-width: 800px; /* 최대 너비 설정 */
+    text-align: center;
+}
+
+.card-title {
+    font-family: 'Georgia', serif; /* 제목에 다른 폰트 설정 */
+    font-size: 24px; /* 제목 크기 */
+    color: #333; /* 제목 색상 */
+    margin-bottom: 15px; /* 제목과 내용 간격 */
+}
+
+.card-text {
+    font-family: 'Verdana', sans-serif; /* 내용에 다른 폰트 설정 */
+    font-size: 16px; /* 내용 크기 */
+    color: #555; /* 내용 색상 */
+    margin-bottom: 20px; /* 내용과 버튼 간격 */
+}
+
+.main-content {
+    margin-left: 240px; /* 사이드바의 너비를 고려하여 적절한 여백 설정 */
+    padding: 20px;
+}
+.card {
+    background-color: #fff8e6; /* 카드 배경색: 아주 연한 하늘색 */
+    border: 1px solid #ddd; /* 카드 테두리 */
+    border-radius: 8px; /* 카드 모서리 둥글게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 카드 그림자 효과 */
+    padding: 20px; /* 카드 내부 여백 */
+    margin: 20px auto; /* 카드 외부 여백 (가운데 정렬) */
+    max-width: 1000px; /* 최대 너비 설정 */
+    font-family: 'Arial', sans-serif; /* 공지사항 제목과 동일한 폰트 설정 */
+    transition: box-shadow 0.3s, border-color 0.3s; /* 부드러운 전환 효과 */
+    text-align: center;
+     
+}
+
+.card:hover {
+    border-color: #a0c4ff; /* hover 시 테두리 색상 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* hover 시 그림자 효과 증가 */
+    border-radius: 8px;
+}
+
+.card-title {
+    font-size: 24px; /* 제목 크기 */
+    color: #333; /* 제목 색상 */
+    margin-bottom: 15px; /* 제목과 내용 간격 */
+    text-align: center;
+}
+
+.card-text {
+    font-size: 16px; /* 내용 크기 */
+    color: #555; /* 내용 색상 */
+    margin-bottom: 20px; /* 내용과 버튼 간격 */
+    text-align: center;
+}
+
+.title {
+    font-size: 28px;
+    color: #333;
+    text-align: center;
+    margin-top: 50px; /* 위쪽 마진 추가 */
+}
+
+.announcement-box {
+    width: 80%; /* 원하는 비율로 조정 */
+    max-width: 800px; /* 최대 너비를 설정하여 너무 넓어지지 않도록 제한 */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px; /* 기존 15px에서 줄임 */
+    margin: 20px auto; /* 자동 좌우 마진을 사용하여 중앙 정렬 */
+    background-color: #fff;
+}
+
+/* 버튼 스타일 */
+.button, .btn-update, .btn-delete {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* 수정 버튼 - 파란색 */
+.btn-update {
+    background-color: #007bff;
+}
+
+.btn-update:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+/* 삭제 버튼 - 빨간색 */
+.btn-delete {
+    background-color: #dc5a5a;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    transform: translateY(-3px);
+}
+
+/* 목록으로 버튼 - 초록색 */
+.button {
+    background-color: #28a745;
+}
+
+.button:hover {
+    background-color: #218838;
+    transform: translateY(-3px);
+}
+
+.card-serve {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f0f8ff;
+    margin: 10px 0;
+}
+
+</style>
+<link rel="stylesheet"
+   href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+</head>
+<body>
+    <h1 class="title">공지사항 페이지</h1>
+
+    <div id="sidebar-load" th:insert="common/fragments/sidebar.html :: sidebar"></div>
+
+   <div class="card" style="width: 180rem;">
+      <div class="card-body">
+         <h1 th:text="${board.boardTitle}">게시글 제목</h1>
+
+         <div class="card-serve">
+            <p th:text="${board.boardContent}">게시글 내용</p>
+         </div>
+         
+         <button id="updateBtn" class="btn-update">수정</button>
+         <button id="deleteBtn" class="btn-delete">삭제</button>
+         <a href="/board.do" class="button">목록으로</a>
+      </div>
+   </div>
+
+   <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">게시글 수정</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modalTitle">제목</label>
+                        <input type="text" class="form-control" id="modalTitle" th:value="${board.boardTitle}">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalContent">내용</label>
+                        <textarea class="form-control" id="modalContent" rows="3" th:value="${board.boardContent}"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="confirmEditBtn">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+   <script th:inline="javascript">
+        $(function() {
+           let boardId = [[${board.boardId}]];
+           let boardTitle = [[${board.boardTitle}]]; 
+           let boardContent = [[${board.boardContent}]];
+           let managerId = [[${user.managerId}]];
+           
+           $('#updateBtn').on('click', function() {
+               if (managerId == 0) {
+                   alert('권한이 없습니다.');
+                   return false;
+               }
+               $('#modalTitle').val(boardTitle);
+               $('#modalContent').val(boardContent);
+               $('#editModal').modal('show');
+           });
+
+           $('#confirmEditBtn').on('click', function() {
+               let title = $('#modalTitle').val();
+               let content = $('#modalContent').val();
+               $.ajax({
+                   type: "GET",
+                   url: "boardcontent/" + boardId,
+                   contentType: "application/json",
+                   data: {
+                       boardId: boardId,
+                       boardTitle: title,
+                       boardContent: content
+                   },
+                   success: function(response) {
+                       alert("수정되었습니다");
+                       location.reload();
+                   },
+                   error: function(xhr, status, error) {
+                       alert("수정 중 오류가 발생했습니다: " + error);
+                   }
+               });
+               $('#editModal').modal('hide');
+           });
+
+           $('#deleteBtn').on('click', function() {
+               if (managerId == 0) {
+                   alert('권한이 없습니다.');
+                   return false;
+               }
+               if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+                   $.ajax({
+                       type: "GET",
+                       url: "boardcontentdel/" + boardId,
+                       success: function(response) {
+                           alert("삭제되었습니다");
+                           window.location.href = 'board.do';
+                       },
+                       error: function(xhr, status, error) {
+                           alert("삭제 중 오류가 발생했습니다: " + error);
+                       }
+                   });
+               }
+           });
+        });
+   </script>
+</body>
+</html>

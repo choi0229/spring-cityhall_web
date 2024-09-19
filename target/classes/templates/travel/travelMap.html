@@ -25,7 +25,7 @@
             align-items: center;
             justify-content: center;
             padding: 30px;
-            background-color: #fff;
+            background-color: #f9f9f9;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             margin: 40px auto;
@@ -432,11 +432,14 @@
                     }); // '년-월-일 시:분:초' 형식으로 변환
 
                     updatedContent += `
-                    	<p>
-	                  	  아이디 : <span class="fw-bold me-5">${i.userId}</span> ${formattedTime}
-	                  	</p>
+                    	<p style="display: flex; justify-content: space-between; align-items: center;">
+	                        <span>아이디 : <span class="fw-bold">${i.userId}</span></span>
+	                        
+	                        <span>${formattedTime}</span>
+	                    </p>
+
 	                  	<p class="d-flex justify-content-between">
-	                  	  ${i.details}
+	                  	  ${i.details}<span>평점 : <span style="color: #FFD700;">★</span><span>${i.rating}</span></span>
 	                  	  <span>
 	                  	    <button class="btn btn-outline-warning btn-sm" id="showUpdateModal"
 	                  	    data-comment-user-id="${i.userId}"
