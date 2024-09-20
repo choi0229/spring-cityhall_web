@@ -208,7 +208,7 @@
 		<!-- 수정하기 모달 : 끝 -->
 
     <!-- 카카오 지도 API -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=333bda7da18df138fb4d9b3e5cf351c4&libraries=services"></script>
+    <script th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoApiKey} + '&libraries=services'"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <script th:inline="javascript">

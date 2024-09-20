@@ -85,6 +85,15 @@
 		    <artifactId>aspectjweaver</artifactId>
 		    <version>1.9.9</version>
 		</dependency>
+		<!-- api 암호화-->
+		
+		<dependency>
+		    <groupId>io.github.cdimascio</groupId>
+		    <artifactId>java-dotenv</artifactId>
+		    <version>5.2.2</version>
+		</dependency>
+
+
 
 	</dependencies>
 
