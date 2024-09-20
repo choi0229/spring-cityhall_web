@@ -4,7 +4,13 @@
 
 	
 	<select id="getTravelList" parameterType="int" resultType="com.project.team3.vo.Travel">
-		select * from tourist_attraction where hotspot = #{spot};
+		select id travelId
+			, name travelName
+			, lat
+			, lon
+			, icon
+			, hotspot
+			 from tourist_attraction where hotspot = #{spot};
 	</select>
 	
 	<select id="getCourseListByAttractionId" parameterType="int" resultType="com.project.team3.vo.Course">

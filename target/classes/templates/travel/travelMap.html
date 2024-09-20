@@ -18,6 +18,14 @@
             padding: 0;
             background-color: #f9f9f9;
         }
+        
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
         .map-container {
             display: flex;
@@ -158,6 +166,7 @@
 </head>
 <body>
 
+    	<h1 class="title">서울시 관광지도</h1>
     <div class="map-container">
     <div id="sidebar-load" th:insert="common/fragments/sidebar.html :: sidebar"></div>
         <div id="map"></div>
@@ -236,7 +245,7 @@
         // 마우스 오버 이벤트 - 아이콘 크기를 확대
         marker.on('mouseover', function() {
             marker.setIcon(hoverIcon);
-            marker.bindTooltip(spot.name, { className: 'map-tooltip', permanent: false }).openTooltip();
+            marker.bindTooltip(spot.travelName, { className: 'map-tooltip', permanent: false }).openTooltip();
         });
 
         // 마우스 아웃 이벤트 - 원래 크기로 복구
@@ -247,15 +256,13 @@
 
         // 마커 클릭 이벤트 - 선택한 관광지 이름을 표시 및 AJAX 요청
         marker.on('click', function() {
-            selectedSpotElement.innerText = spot.name;  // 관광지 이름을 표시
+            selectedSpotElement.innerText = spot.travelName;  // 관광지 이름을 표시
             accordionContainer.innerHTML = "";
 
-            // AJAX 요청을 통해 코스 정보를 가져와서 경로와 코스 이름을 표시
-            console.log('실행됨, Attraction ID:', spot.id);
             $.ajax({
                 type: "GET",
                 url: "courselist.do", // 경로를 맞춰주세요
-                data: { id: spot.id }, // 아이콘에서 id 값을 전달
+                data: { id: spot.travelId }, // 아이콘에서 id 값을 전달
                 success: function(result) {
                     var colors = ['#FF0000', '#0000FF']; // 빨강, 파랑
                     var kakaoMap;
