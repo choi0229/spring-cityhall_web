@@ -2,17 +2,17 @@ package com.project.team3.vo;
 
 public class Travel {
 	
-	public int id;
-	public String name;
+	public int travelId;
+	public String travelName;
 	public double lat;
 	public double lon;
 	public String icon;
 	public int hotspot;
 	
 	
-	public Travel(int id, String name, double lat, double lon, String icon, int hotspot) {
-		this.id = id;
-		this.name = name;
+	public Travel(int travelId, String travelName, double lat, double lon, String icon, int hotspot) {
+		this.travelId = travelId;
+		this.travelName = travelName;
 		this.lat = lat;
 		this.lon = lon;
 		this.icon = icon;
@@ -20,20 +20,20 @@ public class Travel {
 	}
 	@Override
 	public String toString() {
-		return "Travel [id=" + id + ", name=" + name + ", lat=" + lat + ", lon=" + lon + ", icon=" + icon + ", hotspot="
+		return "Travel [travelId=" + travelId + ", travelName=" + travelName + ", lat=" + lat + ", lon=" + lon + ", icon=" + icon + ", hotspot="
 				+ hotspot + "]";
 	}
-	public int getId() {
-		return id;
+	public int getTravelId() {
+		return travelId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setTravelId(int travelId) {
+		this.travelId = travelId;
 	}
-	public String getName() {
-		return name;
+	public String getTravelName() {
+		return travelName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setTravelName(String travelName) {
+		this.travelName = travelName;
 	}
 	public double getLat() {
 		return lat;
