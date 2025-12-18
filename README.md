@@ -1,143 +1,177 @@
-# 🏫 OO시청 페이지
+# 🏫 OO시청 통합 행정 서비스 웹 페이지
 
-## 프로젝트 소개
-- OO시청 페이지는 서울시청을 대상으로 만든 다양한 공공업무를 볼 수 있는 홈페이지입니다.
-- 체육관, 시민회관 등 서울시의 다양한 공공시설의 예약현황을 확인하고, 예약을 진행 할 수 있습니다.
-- 남산타워, DDP 등 서울시의 주요 관광지를 소개하고, 관광코스를 안내해줍니다.
-- 서울시의 주요 정보를 chatbot을 통해 확인이 가능합니다.
-- 시의 주요 공지사항을 확인할 수 있고, 교통사고별 통계분석 현황을 확인할 수 있습니다.
+> 서울시청을 모델로 한 공공 행정 · 관광 · 데이터 분석 통합 웹 서비스
 
-<br>
+---
 
-## 팀원 구성
-<div align="center">
-| **최용혁(팀장)** | **이규원** | **이돈진** | **은희수** |
-| :------: |  :------: | :------: | :------: |
-</div>
-<br>
+## 📌 프로젝트 개요
 
-## 1. 개발 환경
-- Front : HTML, JSP
-- Back-end : spring boot
-- 협업 툴 : Notion, Github
-<br>
+**OO시청 페이지**는 서울시청을 대상으로  
+공공시설 예약, 관광 정보 제공, 데이터 분석, 챗봇 서비스를 통합한  
+**행정 포털형 웹 서비스**입니다.
 
-## 2. 역할 분담
+- 체육관·시민회관 등 **공공시설 예약 및 관리 기능**
+- 남산타워, DDP 등 **주요 관광지 및 관광 코스 안내**
+- 교통사고 데이터 기반 **통계 분석 시각화**
+- 챗봇을 통한 **서울시 주요 정보 질의 응답**
+- 공지사항 관리 및 사용자 권한 기반 접근 제어
 
-### 😎최용혁(팀장)
+---
 
-- **UI**
-    - 페이지 : 공공시설 예약페이지, 서울시 관광지도, 공지사항 작성, 공지사항 수정, 공지사항 상세
-- **기능**
-    - 공공시설 예약, 공공시설 예약 수정, 공공시설 예약 삭제, 관광지도 조회, 추천 코스 조회, 공지사항 등록 및 수정 및 삭제
-<br>
+## 👥 팀 구성
 
-### 🐬이규원
+| 이름 | 역할 |
+|----|----|
+| **최용혁 (팀장)** | 공공시설 예약 · 관광 지도 · 공지사항 |
+| 이규원 | 교통사고 통계 분석 |
+| 이돈진 | 챗봇 기능 |
+| 은희수 | 메인 UI · 회원 기능 |
 
-- **UI**
-    - 페이지 : 교통사고 분석 페이지
-- **기능**
-    - 교통사고 분석 조회, 요일별 사고 조회 
-<br>
+---
 
-### 😄이돈진
+## 🛠️ 기술 스택
 
-- **UI**
-    - 페이지 : 챗봇 채팅페이지 
-- **기능**
-    - 서울시 기본 정보 챗봇 구현 
-<br>
+### Front-end
+- HTML
+- JSP
 
-### 🐣은희수
+### Back-end
+- Spring Boot
 
-- **UI**
-    - 페이지 : 메인 페이지, 프론트엔드 전체적인 색상 및 디자인 
-- **기능**
-    - 로그인, 로그아웃, 마이페이지 
-<br>
+### Database
+- MySQL
 
-## 3. 개발 기간 및 작업 관리
+### Collaboration
+- GitHub
+- Notion
 
-### 개발 기간
-- 전체 개발 기간 : 2024-09-13 ~ 2024-09-20
+---
 
-#### 프로젝트
-- 프로젝트 기능 및 구성
-![image](https://github.com/user-attachments/assets/be240688-ec83-4996-b6a7-73c063dcaa93)
+## 👨‍💻 담당 역할 (최용혁 · 팀장)
 
-- 아키텍처
-![image](https://github.com/user-attachments/assets/20f085e8-0fb9-4aab-b0ec-ec685875be6d)
+### UI 구현
+- 공공시설 예약 페이지
+- 서울시 관광 지도
+- 공지사항 등록 / 수정 / 상세 페이지
 
-- DB모델링 및 ERD
-![image](https://github.com/user-attachments/assets/e2d07829-5357-46c1-94cf-5b1ce244d5b1)
+### 핵심 기능 구현
+- 공공시설 예약 등록 / 수정 / 삭제
+- 지도 기반 관광지 조회 및 추천 코스 안내
+- 공지사항 CRUD 기능
+- 관리자 / 일반 사용자 권한 분리
 
-- 프로젝트 진행
-- Interceptor 사용 : 사용자 정보가 필요한 페이지에서는 로그인을 하도록 강제.
-- AOP 사용 : 로그, 예외처리, 트랜잭션 중 로그를 모듈화.
-- Logger 사용 : application.properties를 통해 로그로 오류 최소화.
-- 
+---
 
+## 📆 개발 기간 및 관리
 
+- **개발 기간** : 2024.09.13 ~ 2024.09.20
+- GitHub 이슈 및 Notion을 활용한 기능 단위 작업 관리
 
-## 4. 페이지별 기능
-[메인화면]
-|![main](https://github.com/user-attachments/assets/c6c38274-580a-45e5-9e28-18d31001d934)|
-- 페이지가 로딩되면 서울시에 대한 모습을 담은 영상이 보임과 동시에 자막으로 서울시의 간략한 소개를 해준다.
-- 상단에는 각 메뉴로 이동할 수 있는 탭과 하단에도 각 메뉴로 이동할 수 있는 버튼이 존재한다.
+---
 
-[공공시설 예약]
-|![rsv1](https://github.com/user-attachments/assets/34982630-7503-4b08-8e2e-dabee22d1d5c)|
-- 서울시의 각 공공시설 확인이 가능합니다.
-- 마커 클릭시 해당 시설의 정보와 날짜 & 시간별 예약 현황 확인이 가능합니다.
-- 지도의 좌측 상단의 버튼을 통해 시설의 카테고리별로 확인이 가능합니다.
+## 🏗️ 시스템 설계
 
-[공공시설 예약 등록]
-|![rsvApply](https://github.com/user-attachments/assets/e0bfcfe6-df55-42b5-81ae-4a2afb77f95e)|
-- 공공시설 실시간으로 예약할 수 있습니다.
-- 이전 날짜는 예약이 불가하며, 시간 단위로 예약이 가능하도록 예외처리를 진행하였습니다.
-- 예약이 있는 시간대에는 예약을 등록할 수 없습니다.
+### 기능 구성
+![기능 구성](https://github.com/user-attachments/assets/be240688-ec83-4996-b6a7-73c063dcaa93)
 
-[공공시설 예약 수정]
-|![rsvModify](https://github.com/user-attachments/assets/af6b83cd-f434-413d-a436-4623a39220f5)|
-- 등록된 공공시설의 예약 날짜 및 시간을 변경할 수 있습니다.
-- 예약이 되어있지 않은 시간대와 날짜로의 예약이 가능합니다.
+### 아키텍처
+![아키텍처](https://github.com/user-attachments/assets/20f085e8-0fb9-4aab-b0ec-ec685875be6d)
 
-[공공시설 예약 삭제]
-|![rsvRemove](https://github.com/user-attachments/assets/734bee62-4a4e-4683-871b-1ef494570a54)|
-- 공공시설 예약을 삭제할 수 있습니다.
+### DB 모델링 (ERD)
+![ERD](https://github.com/user-attachments/assets/e2d07829-5357-46c1-94cf-5b1ce244d5b1)
 
-[서울시 관광지도]
-|![travel1](https://github.com/user-attachments/assets/5540d52a-13eb-4640-b672-cfb1a3555ed8)|
-- 등록된 관광지의 현황을 확인할 수 있습니다.
-- 아이콘을 클릭할 경우 해당 관광지를 포함하는 추천 관광코스를 안내해줍니다.
+---
 
-[서울시 관광지도 코스 상세]
-|![travel](https://github.com/user-attachments/assets/2499b902-825f-4570-b3a0-30550443781e)|
-- 코스별 사용자의 평점 및 후기를 확인이 가능합니다.
-- 코스별 평점 및 후기를 등록할 수 있습니다.
-- 코스에서는 드롭다운을 하기 전에 평점의 평균을 별로 표시해줍니다.
+## ⚙️ 주요 기술 적용 사항
 
-[공지사항]
-|![notice](https://github.com/user-attachments/assets/e8d550be-bb72-467b-8e07-2a6a9f58377b)|
-- 서울시의 주요 행사 및 공지에 대해 공지사항에서 확인이 가능합니다.
-- 관리자로 로그인해야만 글을 등록할 수 있고, 일반 사용자는 글을 등록할 수 없습니다.
-- 관리자 아이디로 로그인할 경우 등록, 수정, 삭제가 가능합니다.
-- 일반 사용자로 로그인하면 등록, 수정, 삭제 버튼이 보이지 않습니다.
+- **Interceptor**
+  - 사용자 정보가 필요한 페이지 접근 시 로그인 강제 처리
+- **AOP**
+  - 로그, 예외 처리, 트랜잭션 로깅 모듈화
+- **Logger**
+  - `application.properties` 기반 로그 레벨 관리로 오류 최소화
+- **권한 기반 UI 제어**
+  - 관리자 / 일반 사용자에 따른 버튼 및 기능 노출 분기
 
-[회원가입]
-|![image](https://github.com/user-attachments/assets/6c225cb9-9993-4075-93cd-624feb418ec9)|
-- 아이디 중복확인이 가능합니다.
+---
 
-[로그인 및 아이디, 비밀번호 찾기]
-|![image](https://github.com/user-attachments/assets/dfa82a7e-d6f3-46f7-88dd-077657ad5e22)|![image](https://github.com/user-attachments/assets/821ead4f-9027-4dfb-9a76-88394dfa1f03)|![Uploading image.png…]()
-- 로그인과 아이디, 비밀번호 찾기가 가능합니다.
+## 📸 주요 화면 및 기능
 
-## 프로젝트 후기
-- Lesson Learned
-- 최용혁 : Jsp에서 Html이 아닌 script에서 타임리프를 활용하기 위해서는 [[${ 키값 }]] 을 통해 불러 올 수 있음. env파일을 통해 api키 값 암호화를 해줄 수 있었음
-- 이규원 : 페이지네이션을 위해서 sql에서 정렬 후 컨트롤러에 전달하고 나타낼 수 있다는 것을 알게되었습니다.
-- 이돈진 : 파이썬 자연어 처리 서버 구축. 모델은 GPT-Neo를 사용, 스프링 부트와 연결, Openweathermap Api에서  api키를 이용해 날씨 정보 수신하는 부분이 새롭고 좋았습니다.
-- 은희수 : onmouseover 와 onmouseout 이벤트를 통해 사용자가 마우스를 올렸을 때 배경색과 크기 가 변하는 효과 적용. (코드에서는 5% 증가)
+### 메인 화면
+![main](https://github.com/user-attachments/assets/c6c38274-580a-45e5-9e28-18d31001d934)
+- 서울시 홍보 영상 자동 재생
+- 주요 서비스 바로가기 제공
 
+---
 
+### 공공시설 예약
+![rsv1](https://github.com/user-attachments/assets/34982630-7503-4b08-8e2e-dabee22d1d5c)
+- 지도 기반 공공시설 조회
+- 날짜 / 시간별 예약 현황 확인
+- 카테고리 필터링 기능 제공
 
+---
+
+### 공공시설 예약 등록
+![rsvApply](https://github.com/user-attachments/assets/e0bfcfe6-df55-42b5-81ae-4a2afb77f95e)
+- 과거 날짜 예약 제한
+- 시간 단위 예약 처리
+- 중복 예약 방지 예외 처리
+
+---
+
+### 공공시설 예약 수정 · 삭제
+![rsvModify](https://github.com/user-attachments/assets/af6b83cd-f434-413d-a436-4623a39220f5)
+![rsvRemove](https://github.com/user-attachments/assets/734bee62-4a4e-4683-871b-1ef494570a54)
+- 예약 일정 변경 및 취소 기능 제공
+
+---
+
+### 서울시 관광 지도
+![travel1](https://github.com/user-attachments/assets/5540d52a-13eb-4640-b672-cfb1a3555ed8)
+- 관광지 정보 지도 시각화
+- 추천 관광 코스 연계 제공
+
+---
+
+### 관광 코스 상세
+![travel](https://github.com/user-attachments/assets/2499b902-825f-4570-b3a0-30550443781e)
+- 코스별 평점 및 후기 조회
+- 사용자 후기 등록 기능
+- 평균 평점 별점 시각화
+
+---
+
+### 공지사항
+![notice](https://github.com/user-attachments/assets/e8d550be-bb72-467b-8e07-2a6a9f58377b)
+- 관리자 전용 등록 / 수정 / 삭제
+- 일반 사용자 읽기 전용 접근
+
+---
+
+### 회원 관리
+![signup](https://github.com/user-attachments/assets/6c225cb9-9993-4075-93cd-624feb418ec9)
+![login](https://github.com/user-attachments/assets/dfa82a7e-d6f3-46f7-88dd-077657ad5e22)
+![find](https://github.com/user-attachments/assets/821ead4f-9027-4dfb-9a76-88394dfa1f03)
+- 회원가입 및 ID 중복 검사
+- 로그인 / 아이디 · 비밀번호 찾기 기능
+
+---
+
+## 📝 프로젝트 회고 (Lesson Learned)
+
+- **최용혁**
+  - JSP script 영역에서 Thymeleaf 변수 호출 시 `[[${key}]]` 사용
+  - `.env` 파일을 활용한 API Key 보안 처리 경험
+- **이규원**
+  - SQL 정렬 기반 페이지네이션 처리 방식 이해
+- **이돈진**
+  - GPT-Neo 기반 챗봇 서버 구축
+  - Spring Boot 연동 및 OpenWeatherMap API 활용 경험
+- **은희수**
+  - `onmouseover / onmouseout` 이벤트를 활용한 UI 인터랙션 개선
+
+---
+
+## 🔗 저장소
+👉 GitHub Repository 링크
