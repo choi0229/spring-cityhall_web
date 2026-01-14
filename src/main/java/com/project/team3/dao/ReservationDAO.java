@@ -27,7 +27,9 @@ public class ReservationDAO {
 	 public int checkOverlap(Reservation reservation) {
 	    return session.selectOne("checkOverlap", reservation);
 	 }
-	 
+
+     public int checkOverlapforUpdate(Reservation reservation) { return session.selectOne("checkOverlapForUpdate", reservation); }
+
 	 public int updateRsv(Reservation reservation) {
 		 return session.update("updateRsv", reservation);
 	 }

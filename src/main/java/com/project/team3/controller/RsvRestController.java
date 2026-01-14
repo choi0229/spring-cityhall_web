@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.team3.dao.ReservationDAO;
 import com.project.team3.vo.Reservation;
 import com.project.team3.vo.User;
+import com.project.team3.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,7 +22,10 @@ public class RsvRestController {
 	@Autowired
 	ReservationDAO dao;
 
-	@RequestMapping(value = "/rsvList.do", produces = "application/json")
+    @Autowired
+    ReservationService reservationService;
+
+    @RequestMapping(value = "/rsvList.do", produces = "application/json")
 	public List<Reservation> getRsvList(@RequestParam("facilityId") int facilityId,@RequestParam("reservationDate") String reservationDate ) {
 		List<Reservation> reservation = dao.getRsvList(facilityId,reservationDate);
 		
@@ -36,10 +40,19 @@ public class RsvRestController {
 			,@RequestParam("participants") String participants
 			,@RequestParam("facilityId") int facilityId
 			,HttpSession session) {
-		User user = (User)session.getAttribute("userId");
-		// System.out.println(facilityId);
-		Reservation reservation = new Reservation(reservationName,reservationDate,startHour,endHour,participants,facilityId, user.userId);
-		return dao.createRsv(reservation);
+
+        try{
+            User user = (User)session.getAttribute("userId");
+            Reservation reservation = new Reservation(reservationName,reservationDate,startHour,endHour,participants,facilityId, user.userId);
+
+            int result = reservationService.createReservation(reservation);
+            return result;
+        }catch(Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return 0;
+        }
+
 	}
 	
 	
@@ -73,10 +86,16 @@ public class RsvRestController {
 			,@RequestParam("participants") String participants
 			,@RequestParam("facilityId") int facilityId
 			,HttpSession session) {
-    	System.out.println(reservationId+"실행");
-		User user = (User)session.getAttribute("userId");
-		Reservation reservation = new Reservation(reservationId,reservationName,reservationDate,startHour,endHour,participants,facilityId, user.userId);
-		return dao.updateRsv(reservation);
+        try{
+            User user = (User)session.getAttribute("userId");
+            Reservation reservation = new Reservation(reservationId,reservationName,reservationDate,startHour,endHour,participants,facilityId, user.userId);
+            int result = reservationService.updateReservation(reservation);
+            return result;
+        }catch(Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return 0;
+        }
 	}
     
     @RequestMapping(value = "/deleteRsv.do", produces = "application/json")

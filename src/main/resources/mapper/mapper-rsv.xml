@@ -50,10 +50,22 @@
 	      AND reservation_date = #{reservationDate}
 	      AND ( 
 	          (startHour &lt; #{endHour} AND endHour &gt; #{startHour}) 
-	      );
+	      )
+        FOR UPDATE
 	</select>
 
-	<update id="updateRsv" parameterType="com.project.team3.vo.Reservation">
+    <select id="checkOverlapForUpdate" parameterType="com.project.team3.vo.Reservation" resultType="int">
+        SELECT COUNT(*)
+        FROM reservation
+        WHERE facility_id = #{facilityId}
+          AND reservation_date = #{reservationDate}
+          AND reservation_id != #{reservationId}
+          AND (startHour &lt; #{endHour} AND endHour &gt; #{startHour})
+            FOR UPDATE
+    </select>
+
+
+    <update id="updateRsv" parameterType="com.project.team3.vo.Reservation">
 		update reservation set reservation_name = #{reservationName}
 		, reservation_date = #{reservationDate}
 		, starthour = #{startHour}
